@@ -236,9 +236,8 @@ For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS
 | `/gemini`, `/image-gen` | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` |
 | `/ship`, `/github-urls`, `/grass-tracker` | [GitHub CLI](https://cli.github.com/) | `brew install gh` |
 | `/grass-tracker` | [grass-tracker](https://github.com/liks79/grass-tracker) | See repo for install |
-| `/cal` | `gws` (Google Workspace CLI) | See [gws docs](https://github.com/nicholasgasior/gws) |
+| `/cal`, `/email-summary` | [gws](https://github.com/nicholasgasior/gws) (Google Workspace CLI) | See gws repo; `gws gmail` must be authenticated |
 | `/apt`, `/apt-watch`, `/presign`, `/email-summary`, `/image-gen` | [uv](https://docs.astral.sh/uv/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
-| `/email-summary` | Gmail MCP | Enable via Claude Code Gmail integration |
 | `/career-to-pptx` | `python-pptx` | Installed automatically via `uv add python-pptx` |
 | `pptx` skill | LibreOffice, Poppler | `apt install libreoffice poppler-utils` |
 
