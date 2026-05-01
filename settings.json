@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh:*)",
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git checkout -b*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git push*)",
+      "Bash(uv run*)",
+      "Bash(gemini*)",
+      "Bash(gws calendar*)",
+      "WebSearch(*)",
+      "WebFetch(*)"
+    ]
+  }
+}

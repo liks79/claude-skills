@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "claude-skills",
+  "version": "1.0.0",
+  "description": "Research, career, productivity and automation — 22 slash commands + 2 skills for Claude Code",
+  "author": {
+    "name": "staytuned",
+    "url": "https://github.com/staytuned"
+  },
+  "homepage": "https://github.com/staytuned/claude-skills",
+  "repository": "https://github.com/staytuned/claude-skills",
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "career",
+    "productivity",
+    "gemini",
+    "pptx",
+    "wiki",
+    "knowledge-management",
+    "email",
+    "calendar",
+    "real-estate"
+  ]
+}
