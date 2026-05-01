@@ -57,14 +57,14 @@ flowchart TD
 ### Option 1 — Via Marketplace (Recommended)
 
 ```
-/plugin marketplace add github:liks79/claude-skills
+/plugin marketplace add liks79/claude-skills
 /plugin install claude-skills@liks79-skills
 ```
 
 ### Option 2 — Direct Install
 
 ```bash
-claude plugin install github:liks79/claude-skills --scope user
+claude plugin install liks79/claude-skills --scope user
 ```
 
 ### Option 3 — Manual (`settings.json`)
