@@ -13,14 +13,14 @@ A curated collection of slash commands, skills, and agents for [Claude Code](htt
 Add this repo as a marketplace, then install the plugin:
 
 ```
-/plugin marketplace add github:staytuned/claude-skills
-/plugin install claude-skills@staytuned-skills
+/plugin marketplace add github:liks79/claude-skills
+/plugin install claude-skills@liks79-skills
 ```
 
 ### Option 2: Direct Install
 
 ```bash
-claude plugin install github:staytuned/claude-skills --scope user
+claude plugin install github:liks79/claude-skills --scope user
 ```
 
 ### Option 3: Enable in `settings.json`
@@ -30,15 +30,15 @@ After adding the marketplace, add to your `~/.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "staytuned-skills": {
+    "liks79-skills": {
       "source": {
         "source": "github",
-        "repo": "staytuned/claude-skills"
+        "repo": "liks79/claude-skills"
       }
     }
   },
   "enabledPlugins": {
-    "claude-skills@staytuned-skills": true
+    "claude-skills@liks79-skills": true
   }
 }
 ```

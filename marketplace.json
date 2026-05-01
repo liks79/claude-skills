@@ -1,24 +1,24 @@
 {
-  "name": "staytuned-skills",
+  "name": "liks79-skills",
   "owner": {
-    "name": "staytuned",
-    "url": "https://github.com/staytuned"
+    "name": "liks79",
+    "url": "https://github.com/liks79"
   },
   "plugins": [
     {
       "name": "claude-skills",
       "source": {
         "source": "github",
-        "repo": "staytuned/claude-skills"
+        "repo": "liks79/claude-skills"
       },
       "description": "Research, career, productivity and automation — 22 slash commands + 2 skills for Claude Code",
       "version": "1.0.0",
       "author": {
-        "name": "staytuned",
-        "url": "https://github.com/staytuned"
+        "name": "liks79",
+        "url": "https://github.com/liks79"
       },
-      "homepage": "https://github.com/staytuned/claude-skills",
-      "repository": "https://github.com/staytuned/claude-skills",
+      "homepage": "https://github.com/liks79/claude-skills",
+      "repository": "https://github.com/liks79/claude-skills",
       "license": "MIT",
       "keywords": [
         "research",
