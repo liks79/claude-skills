@@ -7,7 +7,7 @@ Examples: `Toss Backend Engineer`, `Kakao Frontend https://...`, `Google SWE`
 
 ## Template Selection
 
-Default template per `TEMPLATES/research/_registry.md`: **T5 Strategic Roadmap**
+Default template: **T5 Strategic Roadmap**
 
 | Situation | Template | Reason |
 |-----------|----------|--------|
@@ -66,7 +66,7 @@ Classify the collected content into the following 4 categories.
 
 ### Step 3 — Write the Report
 
-Create `20_AREAS/career/interview/<company>_<role>_prep_YYYY-MM-DD.md` using the template below:
+Create `career/interview/<company>_<role>_prep_YYYY-MM-DD.md` using the template below:
 
 ```markdown
 # [Company] [Role] Interview Preparation Report
@@ -202,10 +202,10 @@ Create `20_AREAS/career/interview/<company>_<role>_prep_YYYY-MM-DD.md` using the
 
 After generating the report, suggest the following to the user:
 
-1. **Coding problem list** → `20_AREAS/career/interview/coding/<company>_<role>_problems.md`
-2. **System design notes** → `20_AREAS/career/interview/system-design/<company>_<role>_scenarios.md`
-3. **Behavioral Q&A sheet** → `20_AREAS/career/interview/behavioral/<company>_<role>_behavioral.md`
-4. **PPTX conversion** → `/career-to-pptx 20_AREAS/career/interview/<main-report>.md`
+1. **Coding problem list** → `career/interview/coding/<company>_<role>_problems.md`
+2. **System design notes** → `career/interview/system-design/<company>_<role>_scenarios.md`
+3. **Behavioral Q&A sheet** → `career/interview/behavioral/<company>_<role>_behavioral.md`
+4. **PPTX conversion** → `/career-to-pptx career/interview/<main-report>.md`
 
 ---
 

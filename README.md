@@ -222,25 +222,20 @@ The `/new-research` and `/apply-research-template` commands use a five-tier temp
 
 ---
 
-## Note: PARA Structure Dependency
+## Output Directory Layout
 
-Several commands are designed for use within a [PARA-structured](https://fortelabs.com/blog/para/) knowledge base and write output to specific directories:
+Commands that create files write to the following paths relative to your working directory:
 
-```
-your-project/
-├── 20_AREAS/         ← research notes, career files, real estate reports
-├── TEMPLATES/        ← research templates (T1–T5)
-└── WIKI/             ← LLM wiki (concepts, entities, syntheses)
-```
+| Command group | Output path |
+|---------------|-------------|
+| `/new-research` | `notes/<domain>/<topic>.md` |
+| `/apply-research-template` | Same directory as input file |
+| `/career-*` | `career/<subfolder>/` |
+| `/wiki-*` | `wiki/compiled/` |
+| `/apt`, `/apt-watch` | `reports/` |
+| `/image-gen` | `notes/image-gen/` (or `--output` path) |
 
-Commands that depend on this structure:
-
-- `/new-research`, `/apply-research-template`
-- All `/career-*` commands → writes to `20_AREAS/career/`
-- All `/wiki-*` commands → reads/writes `WIKI/`
-- `/apt`, `/apt-watch` → writes to `20_AREAS/fortune/`
-
-These commands still work outside a PARA project — they will create the directories as needed — but they are most useful when the full structure is in place.
+Directories are created automatically on first use. Templates are bundled with the plugin under `templates/research/` and resolved from the plugin cache at runtime — no project setup required.
 
 ---
 

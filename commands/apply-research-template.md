@@ -6,16 +6,16 @@ Apply a research template to an existing markdown document: $ARGUMENTS
 /apply-research-template <file-path> [Template N] [depth: <value>] [--inplace]
 
 # Auto-detect template + standard depth
-/apply-research-template 20_AREAS/ai-ml/rag-research-2026.md
+/apply-research-template notes/ai-ml/rag-research-2026.md
 
 # Specify template explicitly
-/apply-research-template 20_AREAS/devops/k8s-analysis.md Template 2
+/apply-research-template notes/devops/k8s-analysis.md Template 2
 
 # Specify template + depth
-/apply-research-template 20_AREAS/career/companies/kakao.md Template 3 depth: deep
+/apply-research-template career/companies/kakao.md Template 3 depth: deep
 
 # Overwrite original file (default: create new file)
-/apply-research-template 20_AREAS/ai-ml/rag-research-2026.md --inplace
+/apply-research-template notes/ai-ml/rag-research-2026.md --inplace
 ```
 
 ## Procedure
@@ -41,7 +41,7 @@ Read the target file using the Read tool. If the file does not exist, notify the
 
 ### Step 3 — Auto-detect template (when Template N is not specified)
 
-Read `TEMPLATES/research/_registry.md`, then analyze the file content's keywords and structure to determine the template:
+Analyze the file content's keywords and structure to determine the template:
 
 | File content signals | Selected template |
 |----------------------|-------------------|
@@ -56,7 +56,7 @@ Skip this step if the user specified `Template N`.
 Show the detected result to the user and **confirm before proceeding**:
 ```
 Detected template: T3 Market Analysis (depth: standard)
-File: 20_AREAS/ai-ml/rag-research-2026.md → 20_AREAS/ai-ml/rag-research-2026-T3.md
+File: notes/ai-ml/rag-research-2026.md → notes/ai-ml/rag-research-2026-T3.md
 
 Proceed? (Specify Template N if you want a different template)
 ```
@@ -65,15 +65,20 @@ Proceed? (Specify Template N if you want a different template)
 
 ### Step 4 — Load template
 
-Read the selected template file:
+Resolve the templates directory, then Read the selected template file:
 
-| Template | File path |
-|----------|-----------|
-| T1 | `TEMPLATES/research/T1-executive-brief.md` |
-| T2 | `TEMPLATES/research/T2-tech-deep-dive.md` |
-| T3 | `TEMPLATES/research/T3-market-analysis.md` |
-| T4 | `TEMPLATES/research/T4-comparative-evaluation.md` |
-| T5 | `TEMPLATES/research/T5-strategic-roadmap.md` |
+```bash
+_TPL=$(find "$HOME/.claude/plugins/cache" -path "*/claude-skills/*/templates/research" -type d 2>/dev/null | sort -rV | head -1)
+[ -z "$_TPL" ] && _TPL="templates/research"
+```
+
+| Template | File |
+|----------|------|
+| T1 | `$_TPL/T1-executive-brief.md` |
+| T2 | `$_TPL/T2-tech-deep-dive.md` |
+| T3 | `$_TPL/T3-market-analysis.md` |
+| T4 | `$_TPL/T4-comparative-evaluation.md` |
+| T5 | `$_TPL/T5-strategic-roadmap.md` |
 
 ---
 

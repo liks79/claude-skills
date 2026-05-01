@@ -7,7 +7,7 @@ Ingest a source file or URL into the LLM wiki: $ARGUMENTS
 
 # File path
 /wiki-ingest raw/ai-ml/ai-agent-evaluation-2026.md
-/wiki-ingest 20_AREAS/claude-code/discord/claude-code-discord-productivity-2026.md
+/wiki-ingest notes/claude-code/discord/claude-code-discord-productivity-2026.md
 
 # Web URL scraping
 /wiki-ingest https://example.com/some-article
@@ -20,7 +20,7 @@ Ingest a source file or URL into the LLM wiki: $ARGUMENTS
 
 ## Procedure
 
-First, read `WIKI/CLAUDE.md` using the Read tool to confirm the schema and templates.
+First, read `wiki/CLAUDE.md` using the Read tool to confirm the schema and templates.
 
 1. **Read source**
    - If `$ARGUMENTS` contains `youtube.com` or `youtu.be`, use **YouTube mode**:
@@ -50,15 +50,15 @@ First, read `WIKI/CLAUDE.md` using the Read tool to confirm the schema and templ
    - Identify 3–8 entities: people, organizations, tools, frameworks
    - Identify relationships between concepts and entities
 
-3. **Update WIKI/compiled/**
-   - Create/update `WIKI/compiled/concepts/<PascalCase>.md`
-   - Create/update `WIKI/compiled/entities/<PascalCase>.md`
+3. **Update wiki/compiled/**
+   - Create/update `wiki/compiled/concepts/<PascalCase>.md`
+   - Create/update `wiki/compiled/entities/<PascalCase>.md`
    - Do not overwrite existing pages — merge content and update the `updated:` date
    - Automatically add `[[wikilink]]` cross-references
-   - Follow the Page Template format in `WIKI/CLAUDE.md`
+   - Follow the Page Template format in `wiki/CLAUDE.md`
 
 4. **Update index.md**
-   - Add new pages to the Concepts / Entities / Syntheses sections in `WIKI/index.md`
+   - Add new pages to the Concepts / Entities / Syntheses sections in `wiki/index.md`
    - Update the total page count
 
 5. **Record in log.md** (append at the top)

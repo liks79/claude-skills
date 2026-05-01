@@ -4,7 +4,7 @@ Input: URL or full job posting text
 
 ## Template Selection
 
-Default template per `TEMPLATES/research/_registry.md`: **T4 Comparative Evaluation**
+Default template: **T4 Comparative Evaluation**
 
 | Situation | Template | Reason |
 |-----------|----------|--------|
@@ -41,7 +41,7 @@ Default template per `TEMPLATES/research/_registry.md`: **T4 Comparative Evaluat
 
 4. **Keyword extraction** — list of key keywords to use when writing a resume or cover letter
 
-5. **Save** — `20_AREAS/career/job-search/<company>_<role>_YYYY-MM-DD.md`:
+5. **Save** — `career/job-search/<company>_<role>_YYYY-MM-DD.md`:
 
 ```markdown
 # [Company] [Role] Job Posting Analysis

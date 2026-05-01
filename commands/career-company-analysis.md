@@ -2,7 +2,7 @@ Use the career-researcher agent to research and analyze the company: $ARGUMENTS
 
 ## Template Selection
 
-Default template per `TEMPLATES/research/_registry.md`: **T3 Market Analysis**
+Default template: **T3 Market Analysis**
 
 | Situation | Template | Reason |
 |-----------|----------|--------|
@@ -34,7 +34,7 @@ Default template per `TEMPLATES/research/_registry.md`: **T3 Market Analysis**
    | Compensation | Salary range, stock options, benefits |
    | Pros / Cons | Summary of advantages and disadvantages (source-based) |
 
-3. **Save** — save to `20_AREAS/career/companies/<company_slug>.md` using the template below:
+3. **Save** — save to `career/companies/<company_slug>.md` using the template below:
 
 ```markdown
 # [Company] Company Analysis
@@ -70,4 +70,4 @@ Default template per `TEMPLATES/research/_registry.md`: **T3 Market Analysis**
 ```
 
 4. Notify the user of the saved file path and ask whether they want a PPTX conversion.
-   If needed, suggest `/career-to-pptx 20_AREAS/career/companies/<company_slug>.md`.
+   If needed, suggest `/career-to-pptx career/companies/<company_slug>.md`.

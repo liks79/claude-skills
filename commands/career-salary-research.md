@@ -5,7 +5,7 @@ Examples: `Backend Engineer Seoul 3 years`, `ML Engineer Korea senior`
 
 ## Template Selection
 
-Default template per `TEMPLATES/research/_registry.md`: **T3 Market Analysis**
+Default template: **T3 Market Analysis**
 
 | Situation | Template | Reason |
 |-----------|----------|--------|
@@ -37,7 +37,7 @@ Default template per `TEMPLATES/research/_registry.md`: **T3 Market Analysis**
    | 25th / 75th percentile | Distribution range |
    | Non-cash compensation | Stock options, RSU, signing bonus |
 
-3. **Save** — `20_AREAS/career/salary/<role_slug>_YYYY-MM.md`:
+3. **Save** — `career/salary/<role_slug>_YYYY-MM.md`:
 
 ```markdown
 # [Role] Salary Research

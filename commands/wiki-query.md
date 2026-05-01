@@ -12,14 +12,14 @@ Query the LLM wiki and synthesize an answer: $ARGUMENTS
 ## Procedure
 
 1. **Browse index.md**
-   - Read `WIKI/index.md`
+   - Read `wiki/index.md`
    - Identify Concepts / Entities / Syntheses related to the `$ARGUMENTS` keywords
 
 2. **Read pages**
-   - Read relevant `WIKI/compiled/concepts/` pages
-   - Read relevant `WIKI/compiled/entities/` pages
-   - Read relevant `WIKI/compiled/syntheses/` pages (if available)
-   - Reference `WIKI/raw/` original sources if needed
+   - Read relevant `wiki/compiled/concepts/` pages
+   - Read relevant `wiki/compiled/entities/` pages
+   - Read relevant `wiki/compiled/syntheses/` pages (if available)
+   - Reference `wiki/raw/` original sources if needed
 
 3. **Write answer**
    - Cite sources using `[[wikilink]]` references
@@ -28,7 +28,7 @@ Query the LLM wiki and synthesize an answer: $ARGUMENTS
 
 4. **Suggest saving synthesis**
    - If the answer has value as a standalone guide, suggest saving it:
-     `Save to WIKI/compiled/syntheses/<Title>.md?`
+     `Save to wiki/compiled/syntheses/<Title>.md?`
 
 5. **Record in log.md** (append at the top)
    ```

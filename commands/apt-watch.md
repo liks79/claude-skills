@@ -34,7 +34,7 @@ Examples:
 
 - **Naver Real Estate** (`fin.land.naver.com`) — listing prices (asking prices)
 - Separate from MOLIT official transaction prices — **asking prices may differ from actual transaction prices**
-- Change tracking (new/removed listings): SQLite snapshot accumulation (`20_AREAS/fortune/.apt-watch/<number>.db`)
+- Change tracking (new/removed listings): SQLite snapshot accumulation (`reports/.apt-watch/<number>.db`)
 
 ---
 
@@ -53,7 +53,7 @@ Extract from `$ARGUMENTS`:
 ### Step 2 — Determine Output Path
 
 ```
-output_path = 20_AREAS/fortune/apt-watch-<complex_number>-<YYYYMMDD>.md
+output_path = reports/apt-watch-<complex_number>-<YYYYMMDD>.md
 ```
 
 ### Step 3 — Run Script

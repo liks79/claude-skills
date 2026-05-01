@@ -37,10 +37,10 @@ Extract the following from `$ARGUMENTS`:
 ### Step 2 — Determine Output Path
 
 ```
-output_path = 20_AREAS/fortune/apt-<region>-<YYYYMM>.md
+output_path = reports/apt-<region>-<YYYYMM>.md
 ```
 
-Example: `20_AREAS/fortune/apt-강남구-202604.md`
+Example: `reports/apt-강남구-202604.md`
 
 ### Step 3 — Run Script
 

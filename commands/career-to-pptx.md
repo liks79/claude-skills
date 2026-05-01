@@ -1,6 +1,6 @@
 Use the career-researcher agent to convert a career markdown file to PowerPoint: $ARGUMENTS
 
-Input: `20_AREAS/career/<subfolder>/<filename>.md`
+Input: `career/<subfolder>/<filename>.md`
 
 ## Procedure
 
@@ -38,8 +38,8 @@ Input: `20_AREAS/career/<subfolder>/<filename>.md`
    - Table: header background navy (`1F3864`), font white
 
 4. **Save** — output `.pptx` to the same path as the source markdown:
-   - Input: `20_AREAS/career/companies/toss.md`
-   - Output: `20_AREAS/career/companies/toss.pptx`
+   - Input: `career/companies/toss.md`
+   - Output: `career/companies/toss.pptx`
 
 5. **Execute**:
    ```bash

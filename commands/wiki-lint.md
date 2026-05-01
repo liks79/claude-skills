@@ -9,7 +9,7 @@ Validate wiki consistency and generate an issue report.
 ## Procedure
 
 1. **Check broken wikilinks**
-   - Collect all `[[...]]` patterns from the entire `WIKI/compiled/` directory
+   - Collect all `[[...]]` patterns from the entire `wiki/compiled/` directory
    - Check whether each link target file exists under `compiled/`
    - If not found → add to the broken links list
 
