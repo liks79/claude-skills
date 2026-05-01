@@ -117,7 +117,7 @@ Add the following to `~/.claude/settings.json`:
 |---------|-------------|
 | `/ship [hint]` | Full git workflow: assess changes → create `claude/*` branch → stage → commit (Conventional Commits) → push → open PR with `gh`. |
 | `/github-urls [N]` | Print GitHub URLs for the N most recently changed files in the current repo. |
-| `/grass-tracker [username]` | Show GitHub contribution graph status. Falls back to basic stats via `gh api` if the optional `grass-tracker` CLI is not installed. |
+| `/grass-tracker [username]` | Show GitHub contribution graph status using [grass-tracker](https://github.com/liks79/grass-tracker). Falls back to basic stats via `gh api` if the CLI is not installed. |
 
 ### AI Tools
 
@@ -232,6 +232,7 @@ For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS
 |------------|------|---------|
 | `/gemini`, `/image-gen` | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` |
 | `/ship`, `/github-urls`, `/grass-tracker` | [GitHub CLI](https://cli.github.com/) | `brew install gh` |
+| `/grass-tracker` | [grass-tracker](https://github.com/liks79/grass-tracker) | See repo for install |
 | `/cal` | `gws` (Google Workspace CLI) | See [gws docs](https://github.com/nicholasgasior/gws) |
 | `/apt`, `/apt-watch`, `/presign`, `/email-summary`, `/image-gen` | [uv](https://docs.astral.sh/uv/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
 | `/email-summary` | Gmail MCP | Enable via Claude Code Gmail integration |
