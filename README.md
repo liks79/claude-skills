@@ -9,6 +9,38 @@
 
 ---
 
+## Architecture
+
+```mermaid
+flowchart TD
+    User(["👤 User"])
+
+    subgraph Plugin["📦  claude-skills  Plugin"]
+        subgraph Entry["Entry Points"]
+            CMDS["📋 Commands  ×22\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · productivity\nreal-estate · utils"]
+            SKILLS["🧠 Skills  ×2\n━━━━━━━━━━━━━━━━━━\ngemini  ·  pptx"]
+        end
+
+        AGENT["🤖 Agent\n━━━━━━━━━━━━━━━━━━\ncareer-researcher"]
+
+        subgraph Assets["Bundled Assets"]
+            SCRIPTS["⚙️ Scripts  ×7\n━━━━━━━━━━━━━━━━━━\napt_report · apt_watch\nemail_summary · presign\ngenerate_image\ngithub-urls · recent"]
+            TMPLS["📄 Templates  ×5\n━━━━━━━━━━━━━━━━━━\nT1 Executive Brief\nT2 Tech Deep-Dive\nT3 Market Analysis\nT4 Comparative Eval\nT5 Strategic Roadmap"]
+        end
+    end
+
+    User -->|"invoke /command"| CMDS
+    User -. "context keyword\n(slides · ask Gemini · …)" .-> SKILLS
+
+    CMDS -->|"career topic or /career-*\n→ delegates"| AGENT
+    AGENT -. "reads skill definitions\n(career commands)" .-> CMDS
+    CMDS -->|"shell exec via\nplugin cache path"| SCRIPTS
+    CMDS -->|"research commands\nread scaffold"| TMPLS
+    SKILLS -->|"pptx office\nworkflow"| SCRIPTS
+```
+
+---
+
 ## What's Included
 
 | Type | Count | Contents |
