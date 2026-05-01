@@ -49,6 +49,6 @@ uv run --with google-genai python "$_S" \
 
 ```
 /image-gen A snowy Christmas night with a decorated tree and warm glowing lights
-/image-gen New Year's fireworks over the Han River in Seoul --output ./30_RESOURCES/image-gen/fireworks.png
+/image-gen New Year's fireworks over the Han River in Seoul --output notes/image-gen/fireworks.png
 /image-gen cute cat wearing a santa hat --model gemini-2.0-flash-preview-image-generation
 ```

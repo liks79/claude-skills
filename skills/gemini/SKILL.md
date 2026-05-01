@@ -40,7 +40,7 @@ gemini -m gemini-2.5-pro -p "Complex architecture design question"
 
 ```bash
 # Summarize a markdown document
-cat 20_AREAS/devops/cicd-tools-comparison-2026-04.md | gemini -p "Summarize into 5 key points"
+cat notes/devops/cicd-tools-comparison-2026-04.md | gemini -p "Summarize into 5 key points"
 
 # Code review of diff
 git diff | gemini -p "Review these changes. Point out any potential issues."

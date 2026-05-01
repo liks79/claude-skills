@@ -17,14 +17,14 @@ Options:
     --name TEXT      Complex name (auto-extracted from API if not specified)
     --location TEXT  Location label for display (e.g., Seoul Gangnam-gu)
     --type           매매|전세|전체 (default: 전체)
-    --output PATH    Output file path (default: 20_AREAS/fortune/apt-watch-<number>-<date>.md)
-    --db PATH        SQLite DB path (default: 20_AREAS/fortune/.apt-watch/<number>.db)
+    --output PATH    Output file path (default: reports/apt-watch-<number>-<date>.md)
+    --db PATH        SQLite DB path (default: reports/.apt-watch/<number>.db)
     --no-db          Output current snapshot only without saving to DB
 
 Examples:
     uv run --with "httpx[http2]" python .claude/scripts/apt_watch.py 25937
     uv run --with "httpx[http2]" python .claude/scripts/apt_watch.py 25937 --name e편한세상센트레빌 --location 경기 광명시
-    uv run --with "httpx[http2]" python .claude/scripts/apt_watch.py 10000 --type 전세 --output 20_AREAS/fortune/my-apt.md
+    uv run --with "httpx[http2]" python .claude/scripts/apt_watch.py 10000 --type 전세 --output reports/my-apt.md
 
 How to find the complex number:
     Click on a complex at Naver Real Estate (fin.land.naver.com) and extract the number from the URL
@@ -848,7 +848,7 @@ def main() -> None:
     # DB path
     use_db = not args.no_db
     if use_db:
-        db_path = Path(args.db) if args.db else Path(f"20_AREAS/fortune/.apt-watch/{complex_no}.db")
+        db_path = Path(args.db) if args.db else Path(f"reports/.apt-watch/{complex_no}.db")
     else:
         db_path = None
 

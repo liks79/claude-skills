@@ -28,7 +28,7 @@ Examples:
     uv run --with PublicDataReader --with pandas --with numpy \\
         python .claude/scripts/apt_report.py 마포구 --months 24 --type 전세
     uv run --with PublicDataReader --with pandas --with numpy \\
-        python .claude/scripts/apt_report.py 분당구 --output 20_AREAS/fortune/apt-분당구-2026.md
+        python .claude/scripts/apt_report.py 분당구 --output reports/apt-분당구-2026.md
 """
 from __future__ import annotations
 

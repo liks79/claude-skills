@@ -97,7 +97,7 @@ Add the following to `~/.claude/settings.json`:
 |---------|-------------|
 | `/new-research <topic>` | Create a structured research note. Auto-selects one of five templates (T1–T5) based on topic keywords. Delegates career topics to the `career-researcher` agent. |
 | `/apply-research-template <file> [Template N] [depth]` | Restructure an existing markdown file into a research template. Supports `--inplace` to overwrite the original. |
-| `/wiki-ingest <file-or-url>` | Ingest a file, web URL, or YouTube video into an LLM-readable wiki. Extracts concepts and entities, creates cross-linked pages under `WIKI/compiled/`. |
+| `/wiki-ingest <file-or-url>` | Ingest a file, web URL, or YouTube video into an LLM-readable wiki. Extracts concepts and entities, creates cross-linked pages under `wiki/compiled/`. |
 | `/wiki-query <question>` | Search the local wiki and synthesize an answer with `[[wikilink]]` citations. Optionally saves the result as a new synthesis page. |
 | `/wiki-lint` | Audit wiki health: broken links, orphaned pages, missing frontmatter, stale entries (>90 days). Generates a report with action items. |
 
@@ -105,7 +105,7 @@ Add the following to `~/.claude/settings.json`:
 
 | Command | Description |
 |---------|-------------|
-| `/career-company-analysis <company>` | Web research on a company's tech stack, culture, interview process, and compensation. Saves a structured report to `20_AREAS/career/companies/`. |
+| `/career-company-analysis <company>` | Web research on a company's tech stack, culture, interview process, and compensation. Saves a structured report to `career/companies/`. |
 | `/career-job-analysis <URL-or-text>` | Analyze a job posting. Extracts requirements, performs gap analysis against your background, and lists resume keywords. |
 | `/career-interview-prep <company> <role>` | Generate a structured interview prep guide covering coding, system design, behavioral, and technical deep-dive questions. |
 | `/career-salary-research <role> [region] [years]` | Research market salary data from Blind, LinkedIn, Levels.fyi, and job boards. Produces a distribution table by experience level. |
@@ -188,7 +188,7 @@ A dedicated sub-agent for career research. Automatically delegated to when:
 - `/new-research` detects career-related keywords (job search, interview, salary, etc.)
 - Any `/career-*` command is invoked
 
-**Scope:** Creates and updates files only within `20_AREAS/career/`.
+**Scope:** Creates and updates files only within `career/`.
 
 | Subdirectory | Responsibility |
 |--------------|---------------|
