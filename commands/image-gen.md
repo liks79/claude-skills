@@ -23,7 +23,8 @@ Generate an image using NanoBanana or Imagen via Google Gemini API. $ARGUMENTS
 ## Procedure
 
 1. Parse the prompt and options from `$ARGUMENTS`.
-   - If `--output <path>` is provided, use it as the output path; otherwise use `./30_RESOURCES/image-gen/generated_<timestamp>.png`
+   - If `--output <path>` is provided, use it as the output path
+   - Otherwise use `${BASE_DIR:+$BASE_DIR/}notes/image-gen/generated_<timestamp>.png`
    - If `--model <model>` is provided, use that model
    - Use the remaining text as the prompt
 

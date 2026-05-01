@@ -37,7 +37,8 @@ Default template: **T3 Market Analysis**
    | 25th / 75th percentile | Distribution range |
    | Non-cash compensation | Stock options, RSU, signing bonus |
 
-3. **Save** — `career/salary/<role_slug>_YYYY-MM.md`:
+3. **Save** — `${BASE_DIR:+$BASE_DIR/}career/salary/<role_slug>_YYYY-MM.md`
+   (If `$BASE_DIR` is not set, path is relative to the current working directory):
 
 ```markdown
 # [Role] Salary Research

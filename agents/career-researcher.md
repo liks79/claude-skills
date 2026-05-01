@@ -34,6 +34,8 @@ Read the appropriate skill file using the **Read tool first**, then follow its P
 
 ## Scope (career/ structure)
 
+All output paths are prefixed with `$BASE_DIR/` if the environment variable is set; otherwise paths are relative to the current working directory.
+
 | Path | Responsible Area |
 |------|-----------|
 | `career/interview/` | Interview prep (coding, system design, behavioral) |

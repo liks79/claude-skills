@@ -66,7 +66,8 @@ Classify the collected content into the following 4 categories.
 
 ### Step 3 — Write the Report
 
-Create `career/interview/<company>_<role>_prep_YYYY-MM-DD.md` using the template below:
+Create `${BASE_DIR:+$BASE_DIR/}career/interview/<company>_<role>_prep_YYYY-MM-DD.md` using the template below:
+(If `$BASE_DIR` is not set, path is relative to the current working directory.)
 
 ```markdown
 # [Company] [Role] Interview Preparation Report
@@ -202,10 +203,10 @@ Create `career/interview/<company>_<role>_prep_YYYY-MM-DD.md` using the template
 
 After generating the report, suggest the following to the user:
 
-1. **Coding problem list** → `career/interview/coding/<company>_<role>_problems.md`
-2. **System design notes** → `career/interview/system-design/<company>_<role>_scenarios.md`
-3. **Behavioral Q&A sheet** → `career/interview/behavioral/<company>_<role>_behavioral.md`
-4. **PPTX conversion** → `/career-to-pptx career/interview/<main-report>.md`
+1. **Coding problem list** → `${BASE_DIR:+$BASE_DIR/}career/interview/coding/<company>_<role>_problems.md`
+2. **System design notes** → `${BASE_DIR:+$BASE_DIR/}career/interview/system-design/<company>_<role>_scenarios.md`
+3. **Behavioral Q&A sheet** → `${BASE_DIR:+$BASE_DIR/}career/interview/behavioral/<company>_<role>_behavioral.md`
+4. **PPTX conversion** → `/career-to-pptx ${BASE_DIR:+$BASE_DIR/}career/interview/<main-report>.md`
 
 ---
 

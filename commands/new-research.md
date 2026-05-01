@@ -31,7 +31,8 @@ Create a new research note for the topic: $ARGUMENTS
    - Tools/Config → `notes/tools/`
 
 4. **Create file** — Write the file based on the selected template:
-   - Path: `notes/<domain>/<topic-kebab-case>-YYYY.md`
+   - Path: `${BASE_DIR:+$BASE_DIR/}notes/<domain>/<topic-kebab-case>-YYYY.md`
+   - If `$BASE_DIR` is not set, path is relative to the current working directory
    - Adjust section depth based on the frontmatter `depth` value
    - Remove `<!-- depth: ... -->` comments from the final file
 

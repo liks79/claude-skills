@@ -83,7 +83,7 @@ The `sort -rV | head -1` picks the highest installed version when multiple versi
 
 ## Output Paths (Project-Relative)
 
-Commands write files relative to the user's working directory:
+Commands write files relative to the user's working directory, unless `$BASE_DIR` is set:
 
 | Command group | Output path |
 |---------------|-------------|
@@ -92,6 +92,21 @@ Commands write files relative to the user's working directory:
 | `/wiki-*` | `wiki/compiled/` |
 | `/apt`, `/apt-watch` | `reports/` |
 | `/image-gen` | `notes/image-gen/` (or `--output`) |
+
+### BASE_DIR Support
+
+If the `BASE_DIR` environment variable is set, all output paths above are prefixed with `$BASE_DIR/`. Commands use this pattern:
+
+```
+output_path = ${BASE_DIR:+$BASE_DIR/}reports/apt-<region>-<YYYYMM>.md
+```
+
+Users configure this in `~/.claude/settings.local.json`:
+```json
+{ "env": { "BASE_DIR": "/home/user/my-research" } }
+```
+
+When adding a new file-generating command, apply the same `${BASE_DIR:+$BASE_DIR/}` prefix to all output paths.
 
 Do not introduce `20_AREAS/`, `TEMPLATES/`, or `WIKI/` (old PARA paths) — they were removed intentionally.
 

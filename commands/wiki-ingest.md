@@ -20,7 +20,9 @@ Ingest a source file or URL into the LLM wiki: $ARGUMENTS
 
 ## Procedure
 
-First, read `wiki/CLAUDE.md` using the Read tool to confirm the schema and templates.
+Resolve wiki base: use `${BASE_DIR:+$BASE_DIR/}wiki` as the wiki root (falls back to `wiki/` in the current working directory if `$BASE_DIR` is not set).
+
+First, read `${BASE_DIR:+$BASE_DIR/}wiki/CLAUDE.md` using the Read tool to confirm the schema and templates.
 
 1. **Read source**
    - If `$ARGUMENTS` contains `youtube.com` or `youtu.be`, use **YouTube mode**:
@@ -51,20 +53,21 @@ First, read `wiki/CLAUDE.md` using the Read tool to confirm the schema and templ
    - Identify relationships between concepts and entities
 
 3. **Update wiki/compiled/**
-   - Create/update `wiki/compiled/concepts/<PascalCase>.md`
-   - Create/update `wiki/compiled/entities/<PascalCase>.md`
+   - Create/update `${BASE_DIR:+$BASE_DIR/}wiki/compiled/concepts/<PascalCase>.md`
+   - Create/update `${BASE_DIR:+$BASE_DIR/}wiki/compiled/entities/<PascalCase>.md`
    - Do not overwrite existing pages — merge content and update the `updated:` date
    - Automatically add `[[wikilink]]` cross-references
-   - Follow the Page Template format in `wiki/CLAUDE.md`
+   - Follow the Page Template format in `${BASE_DIR:+$BASE_DIR/}wiki/CLAUDE.md`
 
 4. **Update index.md**
-   - Add new pages to the Concepts / Entities / Syntheses sections in `wiki/index.md`
+   - Add new pages to the Concepts / Entities / Syntheses sections in `${BASE_DIR:+$BASE_DIR/}wiki/index.md`
    - Update the total page count
 
 5. **Record in log.md** (append at the top)
    ```
    YYYY-MM-DD HH:MM  INGEST: <source> → <N> concepts, <M> entities created/updated
    ```
+   File: `${BASE_DIR:+$BASE_DIR/}wiki/log.md`
 
 6. **Print change summary**
    - List of created pages

@@ -213,6 +213,7 @@ Add to `~/.claude/settings.local.json` (never committed to git):
 ```json
 {
   "env": {
+    "BASE_DIR":              "/absolute/path/to/your/workspace",
     "GEMINI_API_KEY":        "your-gemini-api-key",
     "DATA_GO_KR_API_KEY":    "your-data-go-kr-api-key",
     "STORAGE_PROVIDER":      "r2",
@@ -223,6 +224,8 @@ Add to `~/.claude/settings.local.json` (never committed to git):
   }
 }
 ```
+
+`BASE_DIR` is optional. When set, all commands that generate files (`/new-research`, `/career-*`, `/wiki-*`, `/apt`, `/apt-watch`, `/image-gen`) will write their output under that directory instead of the current working directory. This is useful when you work across multiple projects but want all research notes and reports in one place.
 
 For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, and `S3_BUCKET_NAME`.
 

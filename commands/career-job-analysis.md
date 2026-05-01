@@ -41,7 +41,8 @@ Default template: **T4 Comparative Evaluation**
 
 4. **Keyword extraction** — list of key keywords to use when writing a resume or cover letter
 
-5. **Save** — `career/job-search/<company>_<role>_YYYY-MM-DD.md`:
+5. **Save** — `${BASE_DIR:+$BASE_DIR/}career/job-search/<company>_<role>_YYYY-MM-DD.md`
+   (If `$BASE_DIR` is not set, path is relative to the current working directory):
 
 ```markdown
 # [Company] [Role] Job Posting Analysis

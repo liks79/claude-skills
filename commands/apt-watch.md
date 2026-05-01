@@ -52,8 +52,10 @@ Extract from `$ARGUMENTS`:
 
 ### Step 2 — Determine Output Path
 
+Prepend `$BASE_DIR/` if the environment variable is set:
+
 ```
-output_path = reports/apt-watch-<complex_number>-<YYYYMMDD>.md
+output_path = ${BASE_DIR:+$BASE_DIR/}reports/apt-watch-<complex_number>-<YYYYMMDD>.md
 ```
 
 ### Step 3 — Run Script

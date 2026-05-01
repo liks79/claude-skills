@@ -36,11 +36,14 @@ Extract the following from `$ARGUMENTS`:
 
 ### Step 2 — Determine Output Path
 
+Prepend `$BASE_DIR/` if the environment variable is set:
+
 ```
-output_path = reports/apt-<region>-<YYYYMM>.md
+output_path = ${BASE_DIR:+$BASE_DIR/}reports/apt-<region>-<YYYYMM>.md
 ```
 
-Example: `reports/apt-강남구-202604.md`
+Example (no BASE_DIR): `reports/apt-강남구-202604.md`
+Example (BASE_DIR=/home/user/research): `/home/user/research/reports/apt-강남구-202604.md`
 
 ### Step 3 — Run Script
 

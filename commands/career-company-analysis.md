@@ -34,7 +34,8 @@ Default template: **T3 Market Analysis**
    | Compensation | Salary range, stock options, benefits |
    | Pros / Cons | Summary of advantages and disadvantages (source-based) |
 
-3. **Save** — save to `career/companies/<company_slug>.md` using the template below:
+3. **Save** — save to `${BASE_DIR:+$BASE_DIR/}career/companies/<company_slug>.md` using the template below:
+   If `$BASE_DIR` is not set, path is relative to the current working directory.
 
 ```markdown
 # [Company] Company Analysis
@@ -70,4 +71,4 @@ Default template: **T3 Market Analysis**
 ```
 
 4. Notify the user of the saved file path and ask whether they want a PPTX conversion.
-   If needed, suggest `/career-to-pptx career/companies/<company_slug>.md`.
+   If needed, suggest `/career-to-pptx ${BASE_DIR:+$BASE_DIR/}career/companies/<company_slug>.md`.
