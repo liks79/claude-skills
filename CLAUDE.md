@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A Claude Code plugin published at `github:liks79/claude-skills`. It ships 22 slash commands, 2 skills, 1 agent, 7 scripts, and 5 research templates as a self-contained installable package.
 
-The plugin manifest is at `.claude-plugin/plugin.json`. The marketplace entry is `marketplace.json` at the root. Both must have matching `version` strings when releasing.
+The plugin manifest is at `.claude-plugin/plugin.json`. The marketplace entry is `.claude-plugin/marketplace.json`. Both must have matching `version` strings when releasing.
 
 ---
 
@@ -128,5 +128,5 @@ Do not introduce `20_AREAS/`, `TEMPLATES/`, or `WIKI/` (old PARA paths) — they
 ## Releasing a New Version
 
 1. Bump `version` in `.claude-plugin/plugin.json`.
-2. Bump the same version string in `marketplace.json` (under `plugins[0].version`).
+2. Bump the same version string in `.claude-plugin/marketplace.json` (under `plugins[0].version`).
 3. Commit, tag, and push. GitHub release tags are used for pinned installs.
