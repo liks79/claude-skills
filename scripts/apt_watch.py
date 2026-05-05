@@ -197,7 +197,7 @@ def _analyse_changes(
         return sorted(rows, key=lambda x: x["price_won"] or 0)
 
     result = {}
-    for label, delta in [("1 week", timedelta(days=7)), ("1 month", timedelta(days=30))]:
+    for label, delta in [("1주일", timedelta(days=7)), ("1개월", timedelta(days=30))]:
         start = (now - delta).isoformat()
         past = {
             r[0]
@@ -468,18 +468,18 @@ def _render_trade_section(
     )
 
     lines += [
-        f"## {trade_label} Listing Status",
+        f"## {trade_label} 매물 현황",
         "",
-        f"- **Total Listings**: {len(articles)}  ",
+        f"- **전체 매물수**: {len(articles)}건  ",
     ]
     if stats:
         lines += [
-            f"- **Lowest Asking Price**: {_fmt_price(stats['min'])}  ",
-            f"- **Highest Asking Price**: {_fmt_price(stats['max'])}  ",
-            f"- **Median Asking Price**: {_fmt_price(stats['median'])}  ",
+            f"- **최저 호가**: {_fmt_price(stats['min'])}  ",
+            f"- **최고 호가**: {_fmt_price(stats['max'])}  ",
+            f"- **중간 호가**: {_fmt_price(stats['median'])}  ",
         ]
     lines += [
-        f"- **Source**: [Naver Real Estate]({source_url})",
+        f"- **출처**: [네이버 부동산]({source_url})",
         "",
     ]
 
@@ -487,9 +487,9 @@ def _render_trade_section(
     area_stats = _price_stats_by_area(articles)
     if area_stats:
         lines += [
-            "### Price Range by Area",
+            "### 면적별 가격대",
             "",
-            "| Area | Listings | Min | Max | Median |",
+            "| 면적 | 매물수 | 최저 | 최고 | 중간 |",
             "|------|---------|------|------|------|",
         ]
         for s in area_stats:
@@ -499,7 +499,7 @@ def _render_trade_section(
             )
         lines.append("")
 
-        chart = _mermaid_area_chart(area_stats, f"{trade_label} Median Asking Price by Area (100M KRW)")
+        chart = _mermaid_area_chart(area_stats, f"{trade_label} 면적별 호가 중간값 (억원)")
         if chart:
             lines += [chart, ""]
 
@@ -510,15 +510,15 @@ def _render_trade_section(
             if nc == 0 and gc == 0:
                 continue
             lines += [
-                f"### Changes in the Last {period}",
+                f"### 최근 {period} 변동",
                 "",
-                f"- New listings: **{nc}** | Disappeared: **{gc}**",
+                f"- 신규 매물: **{nc}**건 | 사라진 매물: **{gc}**건",
                 "",
             ]
             if data["new"]:
                 lines += [
-                    f"#### New ({nc})",
-                    "| Asking Price | Area | Floor | Direction | Dong |",
+                    f"#### 신규 ({nc}건)",
+                    "| 호가 | 면적 | 층 | 방향 | 동 |",
                     "|------|------|------|------|-----|",
                 ]
                 for a in data["new"][:10]:
@@ -526,8 +526,8 @@ def _render_trade_section(
                 lines.append("")
             if data["disappeared"]:
                 lines += [
-                    f"#### Disappeared ({gc})",
-                    "| Asking Price | Area | Floor | Direction | Dong |",
+                    f"#### 사라진 매물 ({gc}건)",
+                    "| 호가 | 면적 | 층 | 방향 | 동 |",
                     "|------|------|------|------|-----|",
                 ]
                 for a in data["disappeared"][:10]:
@@ -536,9 +536,9 @@ def _render_trade_section(
 
     # Full listing (larger area descending → price ascending, show all)
     lines += [
-        f"### Full Listing ({len(articles)} · Larger Area First / Price Ascending)",
+        f"### 전체 매물 ({len(articles)}건 · 면적 큰 순 / 가격 오름차순)",
         "",
-        "| Rank | Asking Price | Area | Floor | Direction | Dong | Description |",
+        "| 순위 | 호가 | 면적 | 층 | 방향 | 동 | 설명 |",
         "|------|------|------|------|------|-----|------|",
     ]
     for i, a in enumerate(articles, 1):
@@ -557,12 +557,12 @@ def render_report(
     now = datetime.fromisoformat(fetched_at)
     complex_url = f"https://fin.land.naver.com/complexes/{complex_no}"
     lines: list[str] = [
-        f"# {location} {complex_name} Listing Status",
+        f"# {location} {complex_name} 매물 현황",
         "",
-        f"**Complex Number**: {complex_no} · **Complex Name**: [{complex_name}]({complex_url})  ",
-        f"**Fetched At**: {now.strftime('%Y-%m-%d %H:%M')}  ",
-        "**Data Source**: Naver Real Estate (fin.land.naver.com)  ",
-        "**Note**: Based on asking prices (not actual transaction prices)",
+        f"**단지번호**: {complex_no} · **단지명**: [{complex_name}]({complex_url})  ",
+        f"**조회 시각**: {now.strftime('%Y-%m-%d %H:%M')}  ",
+        "**데이터 출처**: 네이버 부동산 (fin.land.naver.com)  ",
+        "**주의**: 호가 기준 (실거래가 아님)",
         "",
         "---",
         "",

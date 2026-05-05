@@ -593,12 +593,12 @@ def render_report(
     e_label = f"{end_ym[:4]}-{end_ym[4:]}"
 
     lines: list[str] = [
-        f"# {region} Apartment Price Report",
+        f"# {region} 아파트 가격 리포트",
         "",
-        f"**Generated**: {today}  ",
-        f"**Analysis Period**: {s_label} ~ {e_label}  ",
-        "**Data Source**: Ministry of Land, Infrastructure and Transport - Actual Transaction Price System (data.go.kr)  ",
-        "**Analysis Basis**: Median of actual apartment transactions",
+        f"**생성일**: {today}  ",
+        f"**분석 기간**: {s_label} ~ {e_label}  ",
+        "**데이터 출처**: 국토교통부 실거래가 공개시스템 (data.go.kr)  ",
+        "**분석 기준**: 아파트 실거래가 중간값",
         "",
         "---",
         "",
@@ -607,24 +607,24 @@ def render_report(
     # ── Sale transaction section ───────────────────────────────────────────
     if trade_monthly:
         lines += [
-            "## Sale Price Trend",
+            "## 매매가격 추세",
             "",
-            "> Based on median transaction price (unit: 100M KRW)",
+            "> 실거래가 중간값 기준 (단위: 억원)",
             "",
             _mermaid_line(
                 trade_monthly,
-                f"{region} Apartment Sale Median Price (100M KRW)",
+                f"{region} 아파트 매매 중간가격 (억원)",
                 "median_eok",
             ),
             "",
-            "| Month | Transactions | Median Price | Avg. Area | Price/Pyeong |",
+            "| 월 | 거래건수 | 중간가격 | 평균면적 | 평당가격 |",
             "|---|---|---|---|---|",
         ]
         for row in trade_monthly[-12:]:
-            ppp = f"{row['price_per_pyeong']:,} KRW/pyeong" if row["price_per_pyeong"] else "-"
+            ppp = f"{row['price_per_pyeong']:,}원/평" if row["price_per_pyeong"] else "-"
             lines.append(
                 f"| {row['ym']} | {row['count']} "
-                f"| {row['median_eok']}B KRW "
+                f"| {row['median_eok']}억원 "
                 f"| {row['avg_area']}㎡ "
                 f"| {ppp} |"
             )
@@ -635,18 +635,18 @@ def render_report(
             recent_yms = sorted({r["ym"] for r in trade_monthly})[-12:]
             period_label = f"{recent_yms[0]} ~ {recent_yms[-1]}" if recent_yms else ""
             lines += [
-                "### Area Analysis (59㎡ and Above)",
+                "### 면적별 분석 (59㎡ 이상)",
                 "",
-                f"> Sum of actual transactions over the last 12 months ({period_label})",
+                f"> 최근 12개월 실거래 합산 ({period_label})",
                 "",
-                "| Area | Transactions | Median Price | Avg. Area | Price/Pyeong |",
+                "| 면적 | 거래건수 | 중간가격 | 평균면적 | 평당가격 |",
                 "|------|---------|--------------|--------------|----------|",
             ]
             for b in trade_area_buckets:
-                ppp = f"{b['price_per_pyeong']:,} KRW/pyeong" if b["price_per_pyeong"] else "-"
+                ppp = f"{b['price_per_pyeong']:,}원/평" if b["price_per_pyeong"] else "-"
                 lines.append(
                     f"| {b['bucket']} | {b['count']} "
-                    f"| {b['median_eok']}B KRW "
+                    f"| {b['median_eok']}억원 "
                     f"| {b['avg_area']}㎡ "
                     f"| {ppp} |"
                 )
@@ -660,11 +660,11 @@ def render_report(
             top20 = trade_complex_stats[:20]
             top10_chart = trade_complex_stats[:10]
             lines += [
-                "### Transaction Status by Complex",
+                "### 단지별 거래현황",
                 "",
-                f"> Sum of actual transactions over the last 12 months ({period_label}) · Sorted by transaction count descending · Total {total_count} transactions",
+                f"> 최근 12개월 실거래 합산 ({period_label}) · 거래건수 내림차순 · 총 {total_count}건",
                 "",
-                "| # | Complex Name | Transactions | Share | Median Price | Avg. Area | Price/Pyeong |",
+                "| # | 단지명 | 거래건수 | 비율 | 중간가격 | 평균면적 | 평당가격 |",
                 "|---|--------|---------|------|--------------|--------------|----------|",
             ]
             def _anchor_id(name: str) -> str:
@@ -676,7 +676,7 @@ def render_report(
 
             has_appendix = bool(trade_complex_monthly)
             for i, c in enumerate(top20, 1):
-                ppp  = f"{c['price_per_pyeong']:,} KRW/pyeong" if c["price_per_pyeong"] else "-"
+                ppp  = f"{c['price_per_pyeong']:,}원/평" if c["price_per_pyeong"] else "-"
                 pct  = round(c["count"] / total_count * 100, 1) if total_count else 0.0
                 name_cell = (
                     f"[{c['name']}](#{_anchor_id(c['name'])})"
@@ -686,19 +686,19 @@ def render_report(
                 lines.append(
                     f"| {i} | {name_cell} | {c['count']} "
                     f"| {pct}% "
-                    f"| {c['median_eok']}B KRW "
+                    f"| {c['median_eok']}억원 "
                     f"| {c['avg_area']}㎡ "
                     f"| {ppp} |"
                 )
             if len(trade_complex_stats) > 20:
-                lines.append(f"\n> {len(trade_complex_stats) - 20} additional complexes omitted")
+                lines.append(f"\n> 외 {len(trade_complex_stats) - 20}개 단지 생략")
             lines.append("")
 
             # Top 10 complex transaction volume bar chart (x-axis: rank number, avoids Korean rendering issues)
             bar_data = [{"ym": str(i + 1), "count": c["count"]} for i, c in enumerate(top10_chart)]
             complex_chart = _mermaid_bar(
                 bar_data,
-                f"{region} Complex Transaction Count Top 10 (x=rank)",
+                f"{region} 단지별 거래건수 Top 10 (x=순위)",
                 "count",
                 label_slice=None,
             )
@@ -708,49 +708,49 @@ def render_report(
         # Transaction volume bar chart
         vol_chart = _mermaid_bar(
             trade_monthly[-12:],
-            f"{region} Monthly Sale Transaction Volume",
+            f"{region} 월별 매매 거래량",
             "count",
         )
         if vol_chart:
-            lines += ["### Monthly Transaction Volume", "", vol_chart, ""]
+            lines += ["### 월별 거래량", "", vol_chart, ""]
 
         ch = compute_changes(trade_monthly)
         if ch:
             mom_sym = "▲" if ch["mom"] >= 0 else "▼"
             lines += [
-                "### Change Rate",
+                "### 변동률",
                 "",
-                f"- **Month-over-Month**: {mom_sym} {abs(ch['mom'])}%",
+                f"- **전월 대비**: {mom_sym} {abs(ch['mom'])}%",
             ]
             if "yoy" in ch:
                 yoy_sym = "▲" if ch["yoy"] >= 0 else "▼"
                 lines.append(
-                    f"- **Year-over-Year**: {yoy_sym} {abs(ch['yoy'])}%"
-                    f" (same month last year: {ch['year_ago']}B KRW)"
+                    f"- **전년 동월 대비**: {yoy_sym} {abs(ch['yoy'])}%"
+                    f" (전년 동월: {ch['year_ago']}억원)"
                 )
             lines.append("")
 
         if trade_forecast:
             lines += [
-                "### 6-Month Price Forecast",
+                "### 6개월 가격 예측",
                 "",
-                "> ⚠️ Simple linear regression forecast — does NOT account for interest rates, policy, or supply/demand variables. For reference only.",
+                "> ⚠️ 단순 선형 회귀 예측 — 금리·정책·수급 변수 미반영. 참고용으로만 활용하세요.",
                 "",
                 _mermaid_line(
                     trade_monthly[-6:],
-                    f"{region} Sale Price Forecast",
+                    f"{region} 매매가격 예측",
                     "median_eok",
                     trade_forecast,
                     "predicted_eok",
                 ),
                 "",
-                "| Month | Predicted Median | Lower (95%) | Upper (95%) |",
+                "| 월 | 예측 중간가격 | 하한 (95%) | 상한 (95%) |",
                 "|---|---|---|---|",
             ]
             for row in trade_forecast:
                 lines.append(
-                    f"| {row['ym']} | {row['predicted_eok']}B KRW "
-                    f"| {row['lower']}B KRW | {row['upper']}B KRW |"
+                    f"| {row['ym']} | {row['predicted_eok']}억원 "
+                    f"| {row['lower']}억원 | {row['upper']}억원 |"
                 )
             lines.append("")
 
@@ -761,13 +761,13 @@ def render_report(
         recent = trade_monthly[-3:]
         avg_cnt = sum(r["count"] for r in recent) / len(recent)
         lines += [
-            "## Market Summary",
+            "## 시장 요약",
             "",
-            f"- **Sale Transaction Volume** (3-month average): {avg_cnt:.0f} transactions/month",
-            f"- **Latest Median Sale Price**: {trade_monthly[-1]['median_eok']}B KRW ({trade_monthly[-1]['ym']})",
+            f"- **매매 거래량** (3개월 평균): {avg_cnt:.0f}건/월",
+            f"- **최근 매매 중간가격**: {trade_monthly[-1]['median_eok']}억원 ({trade_monthly[-1]['ym']})",
             "",
-            "> **Note**: This report is an automated analysis based on MOLIT actual transaction data.",
-            "> Actual transaction data is delayed by approximately 1 month. Consult a professional before making investment decisions.",
+            "> **참고**: 이 리포트는 국토교통부 실거래가 데이터 기반 자동 분석입니다.",
+            "> 실거래 데이터는 약 1개월 지연됩니다. 투자 결정 전 전문가 상담을 권장합니다.",
             "",
         ]
 
@@ -778,12 +778,12 @@ def render_report(
         else "https://new.land.naver.com/"
     )
     lines += [
-        "## Reference Links",
+        "## 참고 링크",
         "",
-        f"- [MOLIT Actual Transaction Price System](https://rt.molit.go.kr/) — Official transaction price lookup",
-        f"- [Naver Real Estate — {region} Listings]({naver_url}) — Current asking price listings",
-        f"- [KB Real Estate](https://kbland.kr/) — KB price index and market trends",
-        f"- [Korea Real Estate Board R-ONE](https://www.reb.or.kr/r-one) — Official statistics and price index",
+        f"- [국토교통부 실거래가 공개시스템](https://rt.molit.go.kr/) — 공식 거래가 조회",
+        f"- [네이버 부동산 — {region} 매물]({naver_url}) — 현재 호가 매물",
+        f"- [KB부동산](https://kbland.kr/) — KB 가격지수 및 시장 동향",
+        f"- [한국부동산원 R-ONE](https://www.reb.or.kr/r-one) — 공식 통계 및 가격지수",
         "",
     ]
 
@@ -796,7 +796,7 @@ def render_report(
             slug = _re.sub(r"\s+", "-", slug)
             return f"appendix-{slug}"
 
-        lines += ["---", "", "## Appendix — Monthly Transaction Status by Complex", ""]
+        lines += ["---", "", "## 부록 — 단지별 월별 거래현황", ""]
 
         # Maintain same order as the complex transaction table (sorted by transaction count descending)
         complex_order = [c["name"] for c in trade_complex_stats if c["name"] in trade_complex_monthly]
@@ -811,7 +811,7 @@ def render_report(
             if count_data:
                 cnt_chart = _mermaid_bar(
                     monthly,
-                    f"{name} Monthly Transaction Count",
+                    f"{name} 월별 거래건수",
                     "count",
                 )
                 if cnt_chart:
@@ -822,7 +822,7 @@ def render_report(
             if price_data:
                 price_chart = _mermaid_line(
                     [r for r in monthly if r["median_eok"] > 0],
-                    f"{name} Monthly Median Sale Price (100M KRW)",
+                    f"{name} 월별 매매 중간가격 (억원)",
                     "median_eok",
                 )
                 if price_chart:
