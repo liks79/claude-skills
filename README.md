@@ -95,58 +95,58 @@ Add the following to `~/.claude/settings.json`:
 
 | Command | Description |
 |---------|-------------|
-| `/new-research <topic>` | Create a structured research note. Auto-selects one of five templates (T1–T5) based on topic keywords. Delegates career topics to the `career-researcher` agent. |
-| `/apply-research-template <file> [Template N] [depth]` | Restructure an existing markdown file into a research template. Supports `--inplace` to overwrite the original. |
-| `/wiki-ingest <file-or-url>` | Ingest a file, web URL, or YouTube video into an LLM-readable wiki. Extracts concepts and entities, creates cross-linked pages under `wiki/compiled/`. |
-| `/wiki-query <question>` | Search the local wiki and synthesize an answer with `[[wikilink]]` citations. Optionally saves the result as a new synthesis page. |
-| `/wiki-lint` | Audit wiki health: broken links, orphaned pages, missing frontmatter, stale entries (>90 days). Generates a report with action items. |
+| `/claude-skills:new-research <topic>` | Create a structured research note. Auto-selects one of five templates (T1–T5) based on topic keywords. Delegates career topics to the `career-researcher` agent. |
+| `/claude-skills:apply-research-template <file> [Template N] [depth]` | Restructure an existing markdown file into a research template. Supports `--inplace` to overwrite the original. |
+| `/claude-skills:wiki-ingest <file-or-url>` | Ingest a file, web URL, or YouTube video into an LLM-readable wiki. Extracts concepts and entities, creates cross-linked pages under `wiki/compiled/`. |
+| `/claude-skills:wiki-query <question>` | Search the local wiki and synthesize an answer with `[[wikilink]]` citations. Optionally saves the result as a new synthesis page. |
+| `/claude-skills:wiki-lint` | Audit wiki health: broken links, orphaned pages, missing frontmatter, stale entries (>90 days). Generates a report with action items. |
 
 ### Career Development
 
 | Command | Description |
 |---------|-------------|
-| `/career-company-analysis <company>` | Web research on a company's tech stack, culture, interview process, and compensation. Saves a structured report to `career/companies/`. |
-| `/career-job-analysis <URL-or-text>` | Analyze a job posting. Extracts requirements, performs gap analysis against your background, and lists resume keywords. |
-| `/career-interview-prep <company> <role>` | Generate a structured interview prep guide covering coding, system design, behavioral, and technical deep-dive questions. |
-| `/career-salary-research <role> [region] [years]` | Research market salary data from Blind, LinkedIn, Levels.fyi, and job boards. Produces a distribution table by experience level. |
-| `/career-to-pptx <md-path>` | Convert a career markdown file (company analysis, job analysis, etc.) into a PowerPoint presentation using `python-pptx`. |
+| `/claude-skills:career-company-analysis <company>` | Web research on a company's tech stack, culture, interview process, and compensation. Saves a structured report to `career/companies/`. |
+| `/claude-skills:career-job-analysis <URL-or-text>` | Analyze a job posting. Extracts requirements, performs gap analysis against your background, and lists resume keywords. |
+| `/claude-skills:career-interview-prep <company> <role>` | Generate a structured interview prep guide covering coding, system design, behavioral, and technical deep-dive questions. |
+| `/claude-skills:career-salary-research <role> [region] [years]` | Research market salary data from Blind, LinkedIn, Levels.fyi, and job boards. Produces a distribution table by experience level. |
+| `/claude-skills:career-to-pptx <md-path>` | Convert a career markdown file (company analysis, job analysis, etc.) into a PowerPoint presentation using `python-pptx`. |
 
 ### Git & GitHub
 
 | Command | Description |
 |---------|-------------|
-| `/ship [hint]` | Full git workflow: assess changes → create `claude/*` branch → stage → commit (Conventional Commits) → push → open PR with `gh`. |
-| `/github-urls [N]` | Print GitHub URLs for the N most recently changed files in the current repo. |
-| `/grass-tracker [username]` | Show GitHub contribution graph status using [grass-tracker](https://github.com/liks79/grass-tracker). Falls back to basic stats via `gh api` if the CLI is not installed. |
+| `/claude-skills:ship [hint]` | Full git workflow: assess changes → create `claude/*` branch → stage → commit (Conventional Commits) → push → open PR with `gh`. |
+| `/claude-skills:github-urls [N]` | Print GitHub URLs for the N most recently changed files in the current repo. |
+| `/claude-skills:grass-tracker [username]` | Show GitHub contribution graph status using [grass-tracker](https://github.com/liks79/grass-tracker). Falls back to basic stats via `gh api` if the CLI is not installed. |
 
 ### AI Tools
 
 | Command | Description |
 |---------|-------------|
-| `/gemini <prompt> [--model] [--file] [--diff] [--summary]` | Run a prompt through Google Gemini CLI. Supports code review (`--diff`), file summarization (`--summary`), and model selection. |
-| `/image-gen <prompt> [--output] [--model]` | Generate images via Google Gemini API. Supports NanoBanana, NanoBanana 2, NanoBanana Pro, Imagen 4, and Imagen 4 Fast models. |
+| `/claude-skills:gemini <prompt> [--model] [--file] [--diff] [--summary]` | Run a prompt through Google Gemini CLI. Supports code review (`--diff`), file summarization (`--summary`), and model selection. |
+| `/claude-skills:image-gen <prompt> [--output] [--model]` | Generate images via Google Gemini API. Supports NanoBanana, NanoBanana 2, NanoBanana Pro, Imagen 4, and Imagen 4 Fast models. |
 
 ### Productivity
 
 | Command | Description |
 |---------|-------------|
-| `/email-summary [days]` | Fetch and classify Gmail messages by importance: 🔴 urgent, 🟡 important, 🔵 informational, ⚪ ads. Default: last 7 days. |
-| `/cal <event>` | Create or view Google Calendar events using natural language input (KST timezone). Supports Google Meet links and attendees. |
-| `/presign <file> [hours]` | Upload a file to Cloudflare R2 or AWS S3 and return a presigned URL. Default expiry: 24 hours. |
-| `/recent [N]` | List the N most recently modified files in the current directory tree. Default: 10. |
+| `/claude-skills:email-summary [days]` | Fetch and classify Gmail messages by importance: 🔴 urgent, 🟡 important, 🔵 informational, ⚪ ads. Default: last 7 days. |
+| `/claude-skills:cal <event>` | Create or view Google Calendar events using natural language input (KST timezone). Supports Google Meet links and attendees. |
+| `/claude-skills:presign <file> [hours]` | Upload a file to Cloudflare R2 or AWS S3 and return a presigned URL. Default expiry: 24 hours. |
+| `/claude-skills:recent [N]` | List the N most recently modified files in the current directory tree. Default: 10. |
 
 ### Korea Real Estate
 
 | Command | Description |
 |---------|-------------|
-| `/apt <region> [--months N] [--type] [--forecast N] [--pdf]` | Generate an apartment price report for Seoul/metropolitan districts using MOLIT official transaction data (data.go.kr). Includes trend charts and 6-month forecast. |
-| `/apt-watch <complex> [--name] [--location] [--type] [--pdf]` | Track active listings for a specific apartment complex on Naver Real Estate. Detects new and removed listings via SQLite snapshot comparison. |
+| `/claude-skills:apt <region> [--months N] [--type] [--forecast N] [--pdf]` | Generate an apartment price report for Seoul/metropolitan districts using MOLIT official transaction data (data.go.kr). Includes trend charts and 6-month forecast. |
+| `/claude-skills:apt-watch <complex> [--name] [--location] [--type] [--pdf]` | Track active listings for a specific apartment complex on Naver Real Estate. Detects new and removed listings via SQLite snapshot comparison. |
 
 ### Meta
 
 | Command | Description |
 |---------|-------------|
-| `/cmds` | List all commands provided by this plugin, grouped by category. |
+| `/claude-skills:cmds` | List all commands provided by this plugin, grouped by category. |
 
 ---
 
@@ -156,7 +156,7 @@ Skills are context-loaded automatically by Claude Code based on triggers.
 
 ### `gemini`
 
-**Trigger:** User mentions "ask Gemini", "use Gemini CLI", or invokes `/gemini`.
+**Trigger:** User mentions "ask Gemini", "use Gemini CLI", or invokes `/claude-skills:gemini`.
 
 A wrapper around the [Gemini CLI](https://github.com/google-gemini/gemini-cli) for non-interactive use inside Claude Code sessions. Covers single-shot Q&A, stdin piping, code review via `git diff`, and file summarization.
 
@@ -185,8 +185,8 @@ Includes full QA procedures: content validation, visual inspection via LibreOffi
 ### `career-researcher`
 
 A dedicated sub-agent for career research. Automatically delegated to when:
-- `/new-research` detects career-related keywords (job search, interview, salary, etc.)
-- Any `/career-*` command is invoked
+- `/claude-skills:new-research` detects career-related keywords (job search, interview, salary, etc.)
+- Any `/claude-skills:career-*` command is invoked
 
 **Scope:** Creates and updates files only within `career/`.
 
@@ -225,7 +225,7 @@ Add to `~/.claude/settings.local.json` (never committed to git):
 }
 ```
 
-`BASE_DIR` is optional. When set, all commands that generate files (`/new-research`, `/career-*`, `/wiki-*`, `/apt`, `/apt-watch`, `/image-gen`) will write their output under that directory instead of the current working directory. This is useful when you work across multiple projects but want all research notes and reports in one place.
+`BASE_DIR` is optional. When set, all commands that generate files (`/claude-skills:new-research`, `/claude-skills:career-*`, `/claude-skills:wiki-*`, `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:image-gen`) will write their output under that directory instead of the current working directory. This is useful when you work across multiple projects but want all research notes and reports in one place.
 
 For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, and `S3_BUCKET_NAME`.
 
@@ -233,19 +233,19 @@ For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS
 
 | Command(s) | Tool | Install |
 |------------|------|---------|
-| `/gemini`, `/image-gen` | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` |
-| `/ship`, `/github-urls`, `/grass-tracker` | [GitHub CLI](https://cli.github.com/) | `brew install gh` |
-| `/grass-tracker` | [grass-tracker](https://github.com/liks79/grass-tracker) | See repo for install |
-| `/cal`, `/email-summary` | [gws](https://github.com/nicholasgasior/gws) (Google Workspace CLI) | See gws repo; `gws gmail` must be authenticated |
-| `/apt`, `/apt-watch`, `/presign`, `/email-summary`, `/image-gen` | [uv](https://docs.astral.sh/uv/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
-| `/career-to-pptx` | `python-pptx` | Installed automatically via `uv add python-pptx` |
+| `/claude-skills:gemini`, `/claude-skills:image-gen` | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` |
+| `/claude-skills:ship`, `/claude-skills:github-urls`, `/claude-skills:grass-tracker` | [GitHub CLI](https://cli.github.com/) | `brew install gh` |
+| `/claude-skills:grass-tracker` | [grass-tracker](https://github.com/liks79/grass-tracker) | See repo for install |
+| `/claude-skills:cal`, `/claude-skills:email-summary` | [gws](https://github.com/nicholasgasior/gws) (Google Workspace CLI) | See gws repo; `gws gmail` must be authenticated |
+| `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:presign`, `/claude-skills:email-summary`, `/claude-skills:image-gen` | [uv](https://docs.astral.sh/uv/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
+| `/claude-skills:career-to-pptx` | `python-pptx` | Installed automatically via `uv add python-pptx` |
 | `pptx` skill | LibreOffice, Poppler | `apt install libreoffice poppler-utils` |
 
 ---
 
 ## Research Templates
 
-The `/new-research` and `/apply-research-template` commands use a five-tier template system. Templates are auto-selected from topic keywords or can be specified explicitly.
+The `/claude-skills:new-research` and `/claude-skills:apply-research-template` commands use a five-tier template system. Templates are auto-selected from topic keywords or can be specified explicitly.
 
 | Template | Name | Best For | Auto-trigger keywords |
 |----------|------|----------|-----------------------|
@@ -263,12 +263,12 @@ Commands that create files write to the following paths relative to your working
 
 | Command group | Output path |
 |---------------|-------------|
-| `/new-research` | `notes/<domain>/<topic>.md` |
-| `/apply-research-template` | Same directory as input file |
-| `/career-*` | `career/<subfolder>/` |
-| `/wiki-*` | `wiki/compiled/` |
-| `/apt`, `/apt-watch` | `reports/` |
-| `/image-gen` | `notes/image-gen/` (or `--output` path) |
+| `/claude-skills:new-research` | `notes/<domain>/<topic>.md` |
+| `/claude-skills:apply-research-template` | Same directory as input file |
+| `/claude-skills:career-*` | `career/<subfolder>/` |
+| `/claude-skills:wiki-*` | `wiki/compiled/` |
+| `/claude-skills:apt`, `/claude-skills:apt-watch` | `reports/` |
+| `/claude-skills:image-gen` | `notes/image-gen/` (or `--output` path) |
 
 Directories are created automatically on first use. Templates are bundled with the plugin under `templates/research/` and resolved from the plugin cache at runtime — no project setup required.
 
