@@ -3,8 +3,8 @@
 > A curated collection of slash commands, skills, and agents for [Claude Code](https://claude.ai/code) — covering research workflows, career development, productivity tools, and automation.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Commands](https://img.shields.io/badge/commands-22-brightgreen)
-![Skills](https://img.shields.io/badge/skills-2-brightgreen)
+![Commands](https://img.shields.io/badge/commands-24-brightgreen)
+![Skills](https://img.shields.io/badge/skills-3-brightgreen)
 ![Version](https://img.shields.io/badge/version-1.0.0-orange)
 
 ---
@@ -17,8 +17,8 @@ flowchart TD
 
     subgraph Plugin["📦  claude-skills  Plugin"]
         subgraph Entry["Entry Points"]
-            CMDS["📋 Commands  ×22\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · productivity\nreal-estate · utils"]
-            SKILLS["🧠 Skills  ×2\n━━━━━━━━━━━━━━━━━━\ngemini  ·  pptx"]
+            CMDS["📋 Commands  ×24\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · finance\nreal-estate · utils"]
+            SKILLS["🧠 Skills  ×3\n━━━━━━━━━━━━━━━━━━\ngemini  ·  pptx  ·  invest"]
         end
 
         AGENT["🤖 Agent\n━━━━━━━━━━━━━━━━━━\ncareer-researcher"]
@@ -45,8 +45,8 @@ flowchart TD
 
 | Type | Count | Contents |
 |------|-------|----------|
-| Slash Commands | 22 | Research, career, git, AI tools, productivity, real estate |
-| Skills | 2 | `gemini` (Gemini CLI wrapper), `pptx` (PowerPoint toolkit) |
+| Slash Commands | 24 | Research, career, git, AI tools, productivity, finance, real estate |
+| Skills | 3 | `gemini` (Gemini CLI wrapper), `pptx` (PowerPoint toolkit), `invest` (portfolio analytics) |
 | Agent | 1 | `career-researcher` (dedicated career research sub-agent) |
 | Scripts | 7 | Python/shell scripts bundled with commands |
 
@@ -135,6 +135,13 @@ Add the following to `~/.claude/settings.json`:
 | `/claude-skills:presign <file> [hours]` | Upload a file to Cloudflare R2 or AWS S3 and return a presigned URL. Default expiry: 24 hours. |
 | `/claude-skills:recent [N]` | List the N most recently modified files in the current directory tree. Default: 10. |
 
+### Finance & Investment
+
+| Command | Description |
+|---------|-------------|
+| `/invest [sheet_url]` | Read a Google Sheets investment portfolio via GWS CLI, fetch live market data, and generate a premium T6-template report covering allocation, performance, market intelligence, risk matrix, and action plan. Saves to `reports/finance/`. |
+| `/share [md_path] [hours]` | Convert the most recent research `.md` to PDF and upload it to Cloudflare R2, returning a presigned URL (and optionally a Quartz URL). Defaults to the most recently modified file under `notes/` or `reports/`. |
+
 ### Korea Real Estate
 
 | Command | Description |
@@ -165,6 +172,22 @@ A wrapper around the [Gemini CLI](https://github.com/google-gemini/gemini-cli) f
 | (default) | `gemini-2.5-flash` | Fast, general purpose |
 | `gemini-2.5-pro` | `gemini-2.5-pro` | High quality, complex reasoning |
 | `gemini-2.0-flash` | `gemini-2.0-flash` | Lightweight |
+
+### `invest`
+
+**Trigger:** `/invest` command, or context involving "investment portfolio", "Google Sheets portfolio", "GWS portfolio", or T6 investment report generation.
+
+A portfolio analytics skill that reads holdings from Google Sheets via GWS CLI, computes
+per-owner and per-asset-class aggregates, flags concentration risks, and pre-computes all
+Mermaid chart numeric arrays for the T6 report template.
+
+| Step | What it does |
+|------|-------------|
+| 1–3 | Resolve spreadsheet ID, fetch sheet names, read all sheets in parallel |
+| 4 | Parse Holdings: owner, asset class, ticker, avg cost, current price, P&L |
+| 5 | Compute aggregates: portfolio summary, owner-level, asset class %, rankings, risk flags |
+| 6 | Load T6 template via plugin-cache path resolution |
+| 7 | Apply Mermaid rendering guidelines (English-only labels, chart type constraints) |
 
 ### `pptx`
 
@@ -213,19 +236,25 @@ Add to `~/.claude/settings.local.json` (never committed to git):
 ```json
 {
   "env": {
-    "BASE_DIR":              "/absolute/path/to/your/workspace",
-    "GEMINI_API_KEY":        "your-gemini-api-key",
-    "DATA_GO_KR_API_KEY":    "your-data-go-kr-api-key",
-    "STORAGE_PROVIDER":      "r2",
-    "R2_ACCOUNT_ID":         "your-cloudflare-account-id",
-    "R2_ACCESS_KEY_ID":      "your-r2-access-key-id",
-    "R2_SECRET_ACCESS_KEY":  "your-r2-secret-access-key",
-    "R2_BUCKET_NAME":        "presign-shared"
+    "BASE_DIR":                  "/absolute/path/to/your/workspace",
+    "GEMINI_API_KEY":            "your-gemini-api-key",
+    "DATA_GO_KR_API_KEY":        "your-data-go-kr-api-key",
+    "STORAGE_PROVIDER":          "r2",
+    "R2_ACCOUNT_ID":             "your-cloudflare-account-id",
+    "R2_ACCESS_KEY_ID":          "your-r2-access-key-id",
+    "R2_SECRET_ACCESS_KEY":      "your-r2-secret-access-key",
+    "R2_BUCKET_NAME":            "presign-shared",
+    "INVEST_DEFAULT_SHEET_URL":  "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit",
+    "QUARTZ_BASE_URL":           "http://your-quartz-host:7000"
   }
 }
 ```
 
-`BASE_DIR` is optional. When set, all commands that generate files (`/claude-skills:new-research`, `/claude-skills:career-*`, `/claude-skills:wiki-*`, `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:image-gen`) will write their output under that directory instead of the current working directory. This is useful when you work across multiple projects but want all research notes and reports in one place.
+`BASE_DIR` is optional. When set, all commands that generate files (`/claude-skills:new-research`, `/claude-skills:career-*`, `/claude-skills:wiki-*`, `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:image-gen`, `/claude-skills:invest`) will write their output under that directory instead of the current working directory. This is useful when you work across multiple projects but want all research notes and reports in one place.
+
+`INVEST_DEFAULT_SHEET_URL` is required by `/claude-skills:invest` when no sheet URL is passed as an argument.
+
+`QUARTZ_BASE_URL` is optional. When set, `/claude-skills:share` appends a Quartz static-site URL alongside the presigned R2 URL. Omit it if you don't run a local Quartz instance.
 
 For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, and `S3_BUCKET_NAME`.
 
@@ -236,8 +265,8 @@ For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS
 | `/claude-skills:gemini`, `/claude-skills:image-gen` | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` |
 | `/claude-skills:ship`, `/claude-skills:github-urls`, `/claude-skills:grass-tracker` | [GitHub CLI](https://cli.github.com/) | `brew install gh` |
 | `/claude-skills:grass-tracker` | [grass-tracker](https://github.com/liks79/grass-tracker) | See repo for install |
-| `/claude-skills:cal`, `/claude-skills:email-summary` | [gws](https://github.com/nicholasgasior/gws) (Google Workspace CLI) | See gws repo; `gws gmail` must be authenticated |
-| `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:presign`, `/claude-skills:email-summary`, `/claude-skills:image-gen` | [uv](https://docs.astral.sh/uv/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
+| `/claude-skills:cal`, `/claude-skills:email-summary`, `/claude-skills:invest` | [gws](https://github.com/nicholasgasior/gws) (Google Workspace CLI) | See gws repo; `gws auth login` must be authenticated |
+| `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:presign`, `/claude-skills:share`, `/claude-skills:email-summary`, `/claude-skills:image-gen`, `/claude-skills:invest` | [uv](https://docs.astral.sh/uv/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
 | `/claude-skills:career-to-pptx` | `python-pptx` | Installed automatically via `uv add python-pptx` |
 | `pptx` skill | LibreOffice, Poppler | `apt install libreoffice poppler-utils` |
 
@@ -254,6 +283,7 @@ The `/claude-skills:new-research` and `/claude-skills:apply-research-template` c
 | T3 | Market Analysis | Trends, competitive landscape | "market", "trend", "landscape" |
 | T4 | Comparative Evaluation | Side-by-side comparisons | "comparison", "vs", "evaluation" |
 | T5 | Strategic Roadmap | Plans, phases, milestones | "strategy", "roadmap", "plan" |
+| T6 | Investment Report | Portfolio analysis with charts | Used exclusively by `/invest` |
 
 ---
 
@@ -268,6 +298,7 @@ Commands that create files write to the following paths relative to your working
 | `/claude-skills:career-*` | `career/<subfolder>/` |
 | `/claude-skills:wiki-*` | `wiki/compiled/` |
 | `/claude-skills:apt`, `/claude-skills:apt-watch` | `reports/` |
+| `/claude-skills:invest` | `reports/finance/investment-report-YYYY-MM-DD.md` |
 | `/claude-skills:image-gen` | `notes/image-gen/` (or `--output` path) |
 
 Directories are created automatically on first use. Templates are bundled with the plugin under `templates/research/` and resolved from the plugin cache at runtime — no project setup required.
