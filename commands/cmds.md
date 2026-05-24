@@ -26,6 +26,7 @@ Dynamically read and display all `.md` files in the `.claude/commands/` director
    | Git / GitHub | `ship`, `github-urls`, `grass-tracker` |
    | Wiki | `wiki-*` |
    | AI | `gemini`, `image-gen` |
+   | Finance | `invest`, `share` |
    | Real Estate | `apt`, `apt-watch` |
    | Utilities | `cal`, `recent`, `email-summary`, `presign` |
    | Meta | `cmds` |
