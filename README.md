@@ -3,7 +3,7 @@
 > A curated collection of slash commands, skills, and agents for [Claude Code](https://claude.ai/code) — covering research workflows, career development, productivity tools, and automation.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Commands](https://img.shields.io/badge/commands-24-brightgreen)
+![Commands](https://img.shields.io/badge/commands-25-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-3-brightgreen)
 ![Version](https://img.shields.io/badge/version-1.0.0-orange)
 
@@ -17,7 +17,7 @@ flowchart TD
 
     subgraph Plugin["📦  claude-skills  Plugin"]
         subgraph Entry["Entry Points"]
-            CMDS["📋 Commands  ×24\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · finance\nreal-estate · utils"]
+            CMDS["📋 Commands  ×25\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · finance\nreal-estate · utils"]
             SKILLS["🧠 Skills  ×3\n━━━━━━━━━━━━━━━━━━\ngemini  ·  pptx  ·  invest"]
         end
 
@@ -45,7 +45,7 @@ flowchart TD
 
 | Type | Count | Contents |
 |------|-------|----------|
-| Slash Commands | 24 | Research, career, git, AI tools, productivity, finance, real estate |
+| Slash Commands | 25 | Research, career, git, AI tools, productivity, finance, real estate |
 | Skills | 3 | `gemini` (Gemini CLI wrapper), `pptx` (PowerPoint toolkit), `invest` (portfolio analytics) |
 | Agent | 1 | `career-researcher` (dedicated career research sub-agent) |
 | Scripts | 7 | Python/shell scripts bundled with commands |
@@ -131,6 +131,7 @@ Add the following to `~/.claude/settings.json`:
 | Command | Description |
 |---------|-------------|
 | `/claude-skills:email-summary [days]` | Fetch and classify Gmail messages by importance: 🔴 urgent, 🟡 important, 🔵 informational, ⚪ ads. Default: last 7 days. |
+| `/claude-skills:email-archive [N] [--dry-run]` | Fetch unread inbox messages, assign labels via AI (newsletter, career, finance, security, etc.), and archive. Default: 50 messages. Use `--dry-run` to preview without changes. |
 | `/claude-skills:cal <event>` | Create or view Google Calendar events using natural language input (KST timezone). Supports Google Meet links and attendees. |
 | `/claude-skills:presign <file> [hours]` | Upload a file to Cloudflare R2 or AWS S3 and return a presigned URL. Default expiry: 24 hours. |
 | `/claude-skills:recent [N]` | List the N most recently modified files in the current directory tree. Default: 10. |
@@ -265,7 +266,7 @@ For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS
 | `/claude-skills:gemini`, `/claude-skills:image-gen` | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` |
 | `/claude-skills:ship`, `/claude-skills:github-urls`, `/claude-skills:grass-tracker` | [GitHub CLI](https://cli.github.com/) | `brew install gh` |
 | `/claude-skills:grass-tracker` | [grass-tracker](https://github.com/liks79/grass-tracker) | See repo for install |
-| `/claude-skills:cal`, `/claude-skills:email-summary`, `/claude-skills:invest` | [gws](https://github.com/nicholasgasior/gws) (Google Workspace CLI) | See gws repo; `gws auth login` must be authenticated |
+| `/claude-skills:cal`, `/claude-skills:email-summary`, `/claude-skills:email-archive`, `/claude-skills:invest` | [gws](https://github.com/nicholasgasior/gws) (Google Workspace CLI) | See gws repo; `gws auth login` must be authenticated |
 | `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:presign`, `/claude-skills:share`, `/claude-skills:email-summary`, `/claude-skills:image-gen`, `/claude-skills:invest` | [uv](https://docs.astral.sh/uv/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
 | `/claude-skills:career-to-pptx` | `python-pptx` | Installed automatically via `uv add python-pptx` |
 | `pptx` skill | LibreOffice, Poppler | `apt install libreoffice poppler-utils` |
