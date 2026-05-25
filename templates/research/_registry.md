@@ -14,6 +14,8 @@
 | T3 | `templates/research/T3-market-analysis.md` | MARKET ANALYSIS | CB Insights / McKinsey |
 | T4 | `templates/research/T4-comparative-evaluation.md` | COMPARATIVE EVALUATION | Forrester Wave |
 | T5 | `templates/research/T5-strategic-roadmap.md` | STRATEGIC ROADMAP | Deloitte Tech Trends |
+| T6 | `templates/research/T6-investment-report.md` | INVESTMENT REPORT | Used by `/invest` |
+| T7 | `templates/research/T7-newsletter-curation.md` | NEWSLETTER DIGEST | Used by `/newsletter` |
 
 ---
 

@@ -28,7 +28,7 @@ Dynamically read and display all `.md` files in the `.claude/commands/` director
    | AI | `gemini`, `image-gen` |
    | Finance | `invest`, `share` |
    | Real Estate | `apt`, `apt-watch` |
-   | Utilities | `cal`, `recent`, `email-summary`, `email-archive`, `presign` |
+   | Utilities | `cal`, `recent`, `email-summary`, `email-archive`, `newsletter`, `presign` |
    | Meta | `cmds` |
 
 4. Output format:
