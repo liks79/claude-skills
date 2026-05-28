@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.3.1] — 2026-05-28
+
+### Added
+- `/findjob list` subcommand — display current configuration (locations, positions, score threshold, company table with URL-decoded location filters) without running any network scan
+- README: Plugin configuration guide for `FINDJOB_CONFIG_FILE` — how to customize config when installed as a plugin
+
+---
+
 ## [1.3.0] — 2026-05-28
 
 ### Added

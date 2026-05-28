@@ -97,6 +97,55 @@ companies:
 
 ## Procedure
 
+### Step 0 — Handle subcommands
+
+Check if `$ARGUMENTS` starts with `list`. If so, **do not run the scanner**. Instead, display the current configuration and exit.
+
+#### `/findjob list` output format
+
+Read the `findjob-config` YAML block above and print the following sections:
+
+---
+
+**Wanted Locations** (applied as a global filter across all companies):
+
+List each entry in `wanted_locations` as a bullet.
+
+**Wanted Positions** (keyword match — any overlap triggers inclusion):
+
+List each entry in `wanted_positions` as a bullet.
+
+**Min Match Score:** `<min_match_score>` — brief explanation of what the threshold means:
+- `0.0` = include all results regardless of match
+- `0.4` = filter weak single-keyword overlaps (recommended)
+- `0.7` = strict matching only
+- `1.0` = exact phrase match only
+
+**Registered Companies (`<count>` total):**
+
+| # | Company | Parser / ATS | Location Filter | Career Page |
+|---|---------|-------------|----------------|-------------|
+| 1 | Amazon Web Services | aws | Seoul, South Korea | [link](URL) |
+| … | … | … | … | … |
+
+For the **Location Filter** column, extract a human-readable location string from the company's `url` query parameters (URL-decode `loc_query`, `location`, `s`, or `lc` — whichever is present). If no location parameter is found, write `(see URL)`.
+
+**To edit this configuration:**
+
+```
+File   : commands/findjob.md
+Section: ## FindJob Configuration  →  # findjob-config  YAML block
+
+  • Add / remove a company  → edit the `companies:` list
+  • Change location filter  → edit `wanted_locations:`
+  • Change position filter  → edit `wanted_positions:`
+  • Adjust score threshold  → edit `min_match_score:`
+```
+
+After printing this output, **stop** — do not proceed to Step 1.
+
+---
+
 ### Step 1 — Parse arguments and resolve paths
 
 Parse `$ARGUMENTS` for optional overrides:

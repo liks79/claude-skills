@@ -107,6 +107,7 @@ Add the following to `~/.claude/settings.json`:
 | Command | Description |
 |---------|-------------|
 | `/claude-skills:findjob [--output-dir PATH] [--db-path PATH]` | Scan 11 company career sites (AWS, Google, Microsoft, Anthropic, OpenAI, Databricks, Datadog, Cloudflare, Palantir, Redis, Coupang) for openings matching your configured positions and locations. Tracks changes via SQLite and generates a ranked Markdown report with new/removed positions delta. |
+| `/claude-skills:findjob list` | Display current configuration — wanted locations, positions, score threshold, and a table of all registered companies with their location filters. No network requests made. |
 | `/claude-skills:career-company-analysis <company>` | Web research on a company's tech stack, culture, interview process, and compensation. Saves a structured report to `career/companies/`. |
 | `/claude-skills:career-job-analysis <URL-or-text>` | Analyze a job posting. Extracts requirements, performs gap analysis against your background, and lists resume keywords. |
 | `/claude-skills:career-interview-prep <company> <role>` | Generate a structured interview prep guide covering coding, system design, behavioral, and technical deep-dive questions. |
@@ -197,7 +198,47 @@ Mermaid chart numeric arrays for the T6 report template.
 
 Scans 11 company career pages in one shot, scores results by position relevance, stores history in SQLite, and generates a ranked Markdown report.
 
-**Configuration** — edit the embedded YAML block in `commands/findjob.md`:
+#### Usage
+
+```
+/findjob                               # scan all companies and generate report
+/findjob list                          # show current configuration — no network requests
+/findjob --output-dir /path/to/dir     # override output directory
+/findjob --db-path /path/to/jobs.db    # override SQLite DB path
+```
+
+#### `/findjob list` — Configuration Inspector
+
+Displays the current configuration without running any scans:
+
+```
+Wanted Locations (4):
+  • Seoul
+  • South Korea
+  • Seoul, South Korea
+  • Korea
+
+Wanted Positions (12):
+  • Solutions Architect
+  • Engineering Manager
+  ...
+
+Min Match Score: 0.40 — filters weak single-keyword overlaps
+
+Registered Companies (11 total):
+  #  Company                   Parser         Location Filter
+  1  Amazon Web Services       aws            Seoul, South Korea
+  2  Google                    google         Seoul, South Korea
+  ...
+
+To edit: commands/findjob.md → ## FindJob Configuration → findjob-config YAML block
+```
+
+Use this before running a full scan to verify your target positions and companies.
+
+#### Configuration
+
+Edit the embedded YAML block in `commands/findjob.md` (the block tagged `# findjob-config`):
 
 ```yaml
 wanted_locations:
@@ -230,11 +271,12 @@ companies:
 | amazon.jobs API | Amazon Web Services | ✅ Stable JSON API |
 | HTML/JSON-LD | Google, Microsoft | ⚠️ SPA-rendered, may return 0 |
 
-**Outputs per run:**
+#### Outputs per run
+
 - `career/job-search/findjob/findjob-YYYY-MM-DD.md` — ranked report
 - `career/job-search/findjob/jobs.db` — SQLite database (run again to see delta)
 
-**Environment variables** (optional):
+#### Environment variables (optional)
 
 | Variable | Purpose |
 |----------|---------|
@@ -242,6 +284,38 @@ companies:
 | `FINDJOB_DB_PATH` | Override SQLite DB path |
 | `FINDJOB_CONFIG_FILE` | Use a custom config file instead of `commands/findjob.md` |
 | `BASE_DIR` | Prefix all output paths (same as other commands) |
+
+#### Plugin configuration (installed via plugin)
+
+When installed as a plugin, the config file lives inside the plugin cache. To customize `wanted_positions`, `wanted_locations`, or add companies, set `FINDJOB_CONFIG_FILE` to point to your own copy:
+
+```json
+// ~/.claude/settings.local.json
+{
+  "env": {
+    "FINDJOB_CONFIG_FILE": "/absolute/path/to/my-findjob-config.md"
+  }
+}
+```
+
+Your config file only needs the `findjob-config` YAML block — it does not need to be a full copy of the command file. Example minimal config file:
+
+```markdown
+```yaml
+# findjob-config
+wanted_locations:
+  - "Seoul"
+wanted_positions:
+  - "Solutions Architect"
+  - "Staff Engineer"
+min_match_score: 0.40
+companies:
+  - name: "Anthropic"
+    url: "https://www.anthropic.com/careers/jobs"
+    parser: "anthropic"
+    greenhouse_board: "anthropic"
+```
+```
 
 ---
 
