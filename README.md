@@ -3,9 +3,9 @@
 > A curated collection of slash commands, skills, and agents for [Claude Code](https://claude.ai/code) — covering research workflows, career development, productivity tools, and automation.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Commands](https://img.shields.io/badge/commands-26-brightgreen)
+![Commands](https://img.shields.io/badge/commands-27-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-4-brightgreen)
-![Version](https://img.shields.io/badge/version-1.2.0-orange)
+![Version](https://img.shields.io/badge/version-1.3.0-orange)
 
 ---
 
@@ -17,14 +17,14 @@ flowchart TD
 
     subgraph Plugin["📦  claude-skills  Plugin"]
         subgraph Entry["Entry Points"]
-            CMDS["📋 Commands  ×26\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · finance\nreal-estate · utils"]
+            CMDS["📋 Commands  ×27\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · finance\nreal-estate · utils"]
             SKILLS["🧠 Skills  ×4\n━━━━━━━━━━━━━━━━━━\ngemini  ·  pptx  ·  invest\nnewsletter"]
         end
 
         AGENT["🤖 Agent\n━━━━━━━━━━━━━━━━━━\ncareer-researcher"]
 
         subgraph Assets["Bundled Assets"]
-            SCRIPTS["⚙️ Scripts  ×8\n━━━━━━━━━━━━━━━━━━\napt_report · apt_watch\nemail_summary · presign\ngenerate_image · github-urls\nrecent · gmail_fetch_newsletter"]
+            SCRIPTS["⚙️ Scripts  ×9\n━━━━━━━━━━━━━━━━━━\napt_report · apt_watch\nemail_summary · presign\ngenerate_image · github-urls\nrecent · gmail_fetch_newsletter\nfindjob (package)"]
             TMPLS["📄 Templates  ×7\n━━━━━━━━━━━━━━━━━━\nT1 Executive Brief\nT2 Tech Deep-Dive\nT3 Market Analysis\nT4 Comparative Eval\nT5 Strategic Roadmap\nT6 Investment Report\nT7 Newsletter Digest"]
         end
     end
@@ -45,10 +45,10 @@ flowchart TD
 
 | Type | Count | Contents |
 |------|-------|----------|
-| Slash Commands | 26 | Research, career, git, AI tools, productivity, finance, real estate, newsletter |
+| Slash Commands | 27 | Research, career, git, AI tools, productivity, finance, real estate, newsletter, job finder |
 | Skills | 4 | `gemini` (Gemini CLI wrapper), `pptx` (PowerPoint toolkit), `invest` (portfolio analytics), `newsletter` (Gmail newsletter curation) |
 | Agent | 1 | `career-researcher` (dedicated career research sub-agent) |
-| Scripts | 8 | Python/shell scripts bundled with commands |
+| Scripts | 9 | Python/shell scripts bundled with commands (`findjob` is a full Python package with 11 company parsers) |
 | Templates | 7 | T1–T7 research and curation report templates |
 
 ---
@@ -106,6 +106,7 @@ Add the following to `~/.claude/settings.json`:
 
 | Command | Description |
 |---------|-------------|
+| `/claude-skills:findjob [--output-dir PATH] [--db-path PATH]` | Scan 11 company career sites (AWS, Google, Microsoft, Anthropic, OpenAI, Databricks, Datadog, Cloudflare, Palantir, Redis, Coupang) for openings matching your configured positions and locations. Tracks changes via SQLite and generates a ranked Markdown report with new/removed positions delta. |
 | `/claude-skills:career-company-analysis <company>` | Web research on a company's tech stack, culture, interview process, and compensation. Saves a structured report to `career/companies/`. |
 | `/claude-skills:career-job-analysis <URL-or-text>` | Analyze a job posting. Extracts requirements, performs gap analysis against your background, and lists resume keywords. |
 | `/claude-skills:career-interview-prep <company> <role>` | Generate a structured interview prep guide covering coding, system design, behavioral, and technical deep-dive questions. |
@@ -191,6 +192,58 @@ Mermaid chart numeric arrays for the T6 report template.
 | 5 | Compute aggregates: portfolio summary, owner-level, asset class %, rankings, risk flags |
 | 6 | Load T6 template via plugin-cache path resolution |
 | 7 | Apply Mermaid rendering guidelines (English-only labels, chart type constraints) |
+
+### `/findjob` — Job Opening Tracker
+
+Scans 11 company career pages in one shot, scores results by position relevance, stores history in SQLite, and generates a ranked Markdown report.
+
+**Configuration** — edit the embedded YAML block in `commands/findjob.md`:
+
+```yaml
+wanted_locations:
+  - "Seoul"
+  - "South Korea"
+
+wanted_positions:
+  - "Solutions Architect"
+  - "Engineering Manager"
+  - "Staff Engineer"
+  # ... add or remove as needed
+
+min_match_score: 0.40   # 0.0 = all results, 0.4 = recommended, 1.0 = exact only
+
+companies:
+  - name: "Anthropic"
+    url: "https://www.anthropic.com/careers/..."
+    parser: "anthropic"
+    greenhouse_board: "anthropic"
+  # ... add more companies
+```
+
+**Supported ATS systems:**
+
+| ATS | Companies using it | Reliability |
+|-----|-------------------|-------------|
+| Greenhouse | Anthropic, Datadog, Databricks, Cloudflare, Coupang, Redis | ✅ Stable JSON API |
+| Ashby HQ | OpenAI | ✅ Stable JSON API |
+| SmartRecruiters | Palantir | ✅ Stable JSON API |
+| amazon.jobs API | Amazon Web Services | ✅ Stable JSON API |
+| HTML/JSON-LD | Google, Microsoft | ⚠️ SPA-rendered, may return 0 |
+
+**Outputs per run:**
+- `career/job-search/findjob/findjob-YYYY-MM-DD.md` — ranked report
+- `career/job-search/findjob/jobs.db` — SQLite database (run again to see delta)
+
+**Environment variables** (optional):
+
+| Variable | Purpose |
+|----------|---------|
+| `FINDJOB_OUTPUT_DIR` | Override output directory |
+| `FINDJOB_DB_PATH` | Override SQLite DB path |
+| `FINDJOB_CONFIG_FILE` | Use a custom config file instead of `commands/findjob.md` |
+| `BASE_DIR` | Prefix all output paths (same as other commands) |
+
+---
 
 ### `newsletter`
 
@@ -293,7 +346,7 @@ For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS
 | `/claude-skills:ship`, `/claude-skills:github-urls`, `/claude-skills:grass-tracker` | [GitHub CLI](https://cli.github.com/) | `brew install gh` |
 | `/claude-skills:grass-tracker` | [grass-tracker](https://github.com/liks79/grass-tracker) | See repo for install |
 | `/claude-skills:cal`, `/claude-skills:email-summary`, `/claude-skills:email-archive`, `/claude-skills:newsletter`, `/claude-skills:invest` | [gws](https://github.com/nicholasgasior/gws) (Google Workspace CLI) | See gws repo; `gws auth login` must be authenticated |
-| `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:presign`, `/claude-skills:share`, `/claude-skills:email-summary`, `/claude-skills:image-gen`, `/claude-skills:invest` | [uv](https://docs.astral.sh/uv/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
+| `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:presign`, `/claude-skills:share`, `/claude-skills:email-summary`, `/claude-skills:image-gen`, `/claude-skills:invest`, `/claude-skills:findjob`, `/claude-skills:newsletter` | [uv](https://docs.astral.sh/uv/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
 | `/claude-skills:career-to-pptx` | `python-pptx` | Installed automatically via `uv add python-pptx` |
 | `pptx` skill | LibreOffice, Poppler | `apt install libreoffice poppler-utils` |
 
@@ -328,6 +381,7 @@ Commands that create files write to the following paths relative to your working
 | `/claude-skills:apt`, `/claude-skills:apt-watch` | `reports/` |
 | `/claude-skills:invest` | `reports/finance/investment-report-YYYY-MM-DD.md` |
 | `/claude-skills:newsletter` | `notes/newsletters/newsletter-{label-slug}-YYYY-MM-DD.md` |
+| `/claude-skills:findjob` | `career/job-search/findjob/findjob-YYYY-MM-DD.md` + `jobs.db` |
 | `/claude-skills:image-gen` | `notes/image-gen/` (or `--output` path) |
 
 Directories are created automatically on first use. Templates are bundled with the plugin under `templates/research/` and resolved from the plugin cache at runtime — no project setup required.

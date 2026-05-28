@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.3.0] — 2026-05-28
+
+### Added
+- `/findjob` command — scan 11 company career sites (AWS, Google, Microsoft, Anthropic, OpenAI, Databricks, Datadog, Cloudflare, Palantir, Redis, Coupang) for matching job openings
+- `scripts/findjob/` Python package with 11 company-specific parsers (Greenhouse, Ashby HQ, SmartRecruiters, custom APIs, HTML scraping)
+- `scripts/findjob_run.py` — launcher wrapper for the findjob package
+- SQLite-backed history tracking: first_seen / last_seen / active / removed job lifecycle
+- Relevance scoring engine with stemming, role alias patterns, and abbreviation expansion
+
+### Fixed
+- AWS parser: `normalized_location` returned as `str` not `list` — was rendering as individual characters (e.g. `S, e, o, u, l`)
+- Report date truncation: non-ISO dates (e.g. `May 21, 2026`) were incorrectly sliced to 10 chars
+
+---
+
 ## [1.2.0] — 2026-05-25
 
 ### Added
