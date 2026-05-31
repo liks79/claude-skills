@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.4.0] — 2026-05-31
+
+### Added
+- `scripts/findjob/link_validator.py` — parallel HTTP link validator (20 workers, 12 s timeout); removes 404/410 responses and jobs with "position closed" phrases; transient errors (429, 5xx, timeouts) treated as valid to avoid false removals
+- `scripts/findjob/parsers/linkedin.py` — LinkedIn guest API supplemental search (undocumented public endpoint, no auth required); deduplicates against primary career-page results, prefixes job IDs with `li_`
+- `scripts/findjob/run.py` — 4-phase orchestration: Phase 1 (primary parsers) → Phase 2 (link validation) → Phase 3 (LinkedIn supplemental) → Phase 4 (DB upsert)
+- `commands/findjob.md` — `enable_link_validation` and `enable_linkedin_search` YAML config flags
+- `--skip-validation` CLI flag for faster dry-run scans
+
+### Changed
+- Google parser: rewrote from JSON-LD to AF_initDataCallback JS data block extraction — now reliably returns results where the SPA-rendered JSON-LD approach returned 0
+- Microsoft parser: replaced GCS API + HTML scrape with Eightfold PCSX `/api/pcsx/search` API (session cookie obtained by visiting homepage first) — now reliably returns Korea results
+- AWS parser: use `id_icims` (stable numeric ID) and `job_path` (slug URL) instead of UUID-style `id` — UUID-based URLs returned 404 on link validation
+- `db_manager.py` — added `mark_removed_force()` for intentional empty-list removal (link validation case); `mark_removed()` retains its empty-list safety guard
+
+---
+
 ## [1.3.1] — 2026-05-28
 
 ### Added

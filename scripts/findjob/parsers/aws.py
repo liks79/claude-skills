@@ -13,7 +13,8 @@ from ..models import Job
 from .base import JobParser, _HEADERS, _REQUEST_TIMEOUT
 
 _SEARCH_URL = "https://www.amazon.jobs/en/search.json"
-_JOB_URL = "https://www.amazon.jobs/en/jobs/{job_id}"
+_JOB_BASE = "https://www.amazon.jobs"
+_JOB_URL_FALLBACK = "https://www.amazon.jobs/en/jobs/{job_id}"
 
 
 class AWSParser(JobParser):
@@ -27,20 +28,27 @@ class AWSParser(JobParser):
 
         for item in all_items:
             title: str = item.get("title", "")
-            # normalized_location is a str in the API response; fall back to location field
-            raw_loc = item.get("normalized_location") or item.get("location", "")
-            location: str = raw_loc if isinstance(raw_loc, str) else ", ".join(raw_loc)
+            loc_parts: list[str] = item.get("normalized_location", []) or []
+            location: str = ", ".join(loc_parts) if loc_parts else item.get("location", "")
 
             score = self._position_score(title, positions)
             if score <= 0:
                 continue
 
-            job_id = str(item.get("id") or item.get("job_id") or "")
+            # Prefer id_icims (numeric, stable) over UUID-style id
+            job_id = str(item.get("id_icims") or item.get("id") or item.get("job_id") or "")
             if job_id in seen:
                 continue
             seen.add(job_id)
 
-            job_url = _JOB_URL.format(job_id=job_id) if job_id else self.company_url
+            # Use job_path (slug URL) if available — UUID-based URLs return 404
+            job_path = item.get("job_path", "")
+            if job_path:
+                job_url = f"{_JOB_BASE}{job_path}"
+            elif job_id:
+                job_url = _JOB_URL_FALLBACK.format(job_id=job_id)
+            else:
+                job_url = self.company_url
             raw_desc = item.get("description_short") or item.get("description") or ""
             desc = self._strip_html(raw_desc)[:500] if raw_desc else None
 

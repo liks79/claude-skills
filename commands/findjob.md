@@ -40,6 +40,16 @@ wanted_positions:
 # 0.7 = strict matching only | 1.0 = exact phrase match only
 min_match_score: 0.40
 
+# Link validation: HTTP-checks each job URL before including it in the report.
+# Invalid / closed links (HTTP 404, 410, or "job closed" content) are removed.
+# Set to false to skip (faster, may include stale links).
+enable_link_validation: true
+
+# LinkedIn supplemental search: queries LinkedIn's public guest API for each
+# target company's roles in Seoul. Unique results are merged after deduplication.
+# Set to false to disable.
+enable_linkedin_search: true
+
 companies:
   - name: "Amazon Web Services"
     url: "https://www.amazon.jobs/en/search?base_query=&loc_query=Seoul%2C+South+Korea%2C+South+Korea&city=Seoul&county=South+Korea&country=KOR&latitude=37.55886&longitude=126.99989&radius=24km"
@@ -167,7 +177,8 @@ _S=$(find "$HOME/.claude/plugins/cache" -name "findjob_run.py" -path "*/claude-s
 
 uv run --with requests --with pyyaml --with beautifulsoup4 python "$_S" \
   ${OUTPUT_DIR:+--output-dir "$OUTPUT_DIR"} \
-  ${DB_PATH:+--db-path "$DB_PATH"}
+  ${DB_PATH:+--db-path "$DB_PATH"} \
+  ${SKIP_VALIDATION:+--skip-validation}
 ```
 
 The script will:
@@ -197,8 +208,8 @@ If any companies failed to fetch, note them and suggest checking the careers pag
 | Company | ATS System | Notes |
 |---------|-----------|-------|
 | Amazon Web Services | Custom JSON API | ✅ Post-filters by KOR location |
-| Google | HTML scraping | ⚠️ SPA — may return 0 |
-| Microsoft | Eightfold AI + fallback | ⚠️ SPA — may return 0 |
+| Google | AF_initDataCallback scraping | ✅ Extracts embedded JS data |
+| Microsoft | Eightfold PCSX `/api/pcsx/search` | ✅ Session cookie + PCSX search API |
 | Redis | Greenhouse → HTML fallback | ✅ |
 | Datadog | Greenhouse | ✅ |
 | Databricks | Greenhouse | ✅ |
@@ -206,4 +217,16 @@ If any companies failed to fetch, note them and suggest checking the careers pag
 | Cloudflare | Greenhouse | ✅ |
 | Anthropic | Greenhouse | ✅ |
 | OpenAI | Ashby HQ | ✅ |
-| Coupang | Greenhouse | ✅ |
+| Coupang | SmartRecruiters → HTML | ✅ |
+| **LinkedIn** (supplemental) | Guest API (public) | ⚠️ Undocumented endpoint — may be blocked |
+
+### Link validation
+
+Each job URL is HTTP-checked in parallel (up to 20 concurrent requests, 12 s timeout).
+A job is removed from the report when:
+
+- HTTP 404 / 410 response
+- Response body contains "job is no longer available", "position has been filled", etc.
+- Transient errors (429, 5xx, timeouts) are treated as **valid** to avoid false removals.
+
+Pass `--skip-validation` to the script to bypass this phase for faster runs.

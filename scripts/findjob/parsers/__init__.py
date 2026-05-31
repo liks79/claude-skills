@@ -28,6 +28,8 @@ def get_parser(
     from .palantir import PalantirParser
     from .redis_io import RedisParser
 
+    from .linkedin import LinkedInParser
+
     registry: dict[str, type] = {
         "aws": AWSParser,
         "google": GoogleParser,
@@ -40,6 +42,7 @@ def get_parser(
         "anthropic": AnthropicParser,
         "openai": OpenAIParser,
         "coupang": CoupangParser,
+        "linkedin": LinkedInParser,
     }
 
     cls = registry.get(parser_key)

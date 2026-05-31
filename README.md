@@ -5,7 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Commands](https://img.shields.io/badge/commands-27-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-4-brightgreen)
-![Version](https://img.shields.io/badge/version-1.3.0-orange)
+![Version](https://img.shields.io/badge/version-1.4.0-orange)
 
 ---
 
@@ -253,6 +253,10 @@ wanted_positions:
 
 min_match_score: 0.40   # 0.0 = all results, 0.4 = recommended, 1.0 = exact only
 
+# Optional feature flags (both default to true)
+enable_link_validation: true   # HTTP-check each job URL; remove 404/410/closed
+enable_linkedin_search: true   # supplemental LinkedIn guest API search
+
 companies:
   - name: "Anthropic"
     url: "https://www.anthropic.com/careers/..."
@@ -263,13 +267,19 @@ companies:
 
 **Supported ATS systems:**
 
-| ATS | Companies using it | Reliability |
-|-----|-------------------|-------------|
+| ATS | Companies | Reliability |
+|-----|-----------|-------------|
 | Greenhouse | Anthropic, Datadog, Databricks, Cloudflare, Coupang, Redis | ✅ Stable JSON API |
 | Ashby HQ | OpenAI | ✅ Stable JSON API |
-| SmartRecruiters | Palantir | ✅ Stable JSON API |
+| SmartRecruiters | Palantir, Coupang | ✅ Stable JSON API |
 | amazon.jobs API | Amazon Web Services | ✅ Stable JSON API |
-| HTML/JSON-LD | Google, Microsoft | ⚠️ SPA-rendered, may return 0 |
+| AF_initDataCallback scraping | Google | ✅ Embedded JS data extraction |
+| Eightfold PCSX API | Microsoft | ✅ Session cookie + internal API |
+| LinkedIn guest API | (supplemental) | ⚠️ Undocumented — may be blocked |
+
+**Link validation:** After each scan, all job URLs are HTTP-checked in parallel (20 concurrent, 12 s timeout). Jobs returning 404/410 or containing "job closed" phrases are removed from the report before saving to DB. Set `enable_link_validation: false` to skip (faster runs).
+
+**LinkedIn supplemental search:** After the primary scan, each company is searched on LinkedIn's guest API. Unique results (not already found via the direct career page) are merged into the report. Set `enable_linkedin_search: false` to skip.
 
 #### Outputs per run
 

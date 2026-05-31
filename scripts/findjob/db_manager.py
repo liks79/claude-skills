@@ -115,19 +115,41 @@ class DBManager:
         return {"new": new_ids, "updated": updated_ids}
 
     def mark_removed(self, company: str, current_job_ids: list[str], scan_ts: str) -> list[str]:
-        """Mark jobs for *company* not in *current_job_ids* as 'removed'."""
+        """Mark jobs for *company* not in *current_job_ids* as 'removed'.
+
+        Safety guard: if *current_job_ids* is empty (could indicate a fetch error),
+        nothing is marked removed.  Use :meth:`mark_removed_force` when the empty
+        list is intentional (e.g. all links failed validation).
+        """
         if not current_job_ids:
             return []
+        return self.mark_removed_force(company, current_job_ids, scan_ts)
 
-        placeholders = ",".join("?" * len(current_job_ids))
-        rows = self._conn.execute(
-            f"""
-            SELECT job_id FROM jobs
-            WHERE company=? AND status='active'
-              AND job_id NOT IN ({placeholders})
-            """,
-            [company] + current_job_ids,
-        ).fetchall()
+    def mark_removed_force(
+        self, company: str, current_job_ids: list[str], scan_ts: str
+    ) -> list[str]:
+        """Mark jobs for *company* not in *current_job_ids* as 'removed'.
+
+        Unlike :meth:`mark_removed`, this method operates even when
+        *current_job_ids* is empty (marks ALL active jobs for the company removed).
+        Use only when the empty list is deliberate (e.g. link validation removed
+        all results for a company that successfully fetched jobs).
+        """
+        if current_job_ids:
+            placeholders = ",".join("?" * len(current_job_ids))
+            rows = self._conn.execute(
+                f"""
+                SELECT job_id FROM jobs
+                WHERE company=? AND status='active'
+                  AND job_id NOT IN ({placeholders})
+                """,
+                [company] + current_job_ids,
+            ).fetchall()
+        else:
+            rows = self._conn.execute(
+                "SELECT job_id FROM jobs WHERE company=? AND status='active'",
+                (company,),
+            ).fetchall()
 
         removed_ids = [r["job_id"] for r in rows]
         if removed_ids:
