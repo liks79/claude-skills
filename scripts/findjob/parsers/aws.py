@@ -28,8 +28,13 @@ class AWSParser(JobParser):
 
         for item in all_items:
             title: str = item.get("title", "")
-            loc_parts: list[str] = item.get("normalized_location", []) or []
-            location: str = ", ".join(loc_parts) if loc_parts else item.get("location", "")
+            normalized_location = item.get("normalized_location")
+            if isinstance(normalized_location, list):
+                location = ", ".join(normalized_location) if normalized_location else item.get("location", "")
+            elif isinstance(normalized_location, str):
+                location = normalized_location or item.get("location", "")
+            else:
+                location = item.get("location", "")
 
             score = self._position_score(title, positions)
             if score <= 0:
