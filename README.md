@@ -5,7 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Commands](https://img.shields.io/badge/commands-28-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-4-brightgreen)
-![Version](https://img.shields.io/badge/version-1.5.0-orange)
+![Version](https://img.shields.io/badge/version-1.5.1-orange)
 
 ---
 
@@ -98,7 +98,7 @@ Add the following to `~/.claude/settings.json`:
 |---------|-------------|
 | `/claude-skills:new-research <topic>` | Create a structured research note. Auto-selects one of five templates (T1–T5) based on topic keywords. Delegates career topics to the `career-researcher` agent. |
 | `/claude-skills:apply-research-template <file> [Template N] [depth]` | Restructure an existing markdown file into a research template. Supports `--inplace` to overwrite the original. |
-| `/claude-skills:scan [options]` | Scan the vault and build/update a research index. Extracts YAML frontmatter, titles, tags, and dates from all Markdown files. Generates a browsable index with year × month matrix and tag cloud. Incremental cache keeps subsequent runs fast. **Tested with Quartz v5.0+.** |
+| `/claude-skills:scan [options]` | Scan the vault and build/update a research index. Extracts YAML frontmatter, titles, tags, and dates from all Markdown files. Generates a browsable index with year × month matrix and tag cloud. Incremental cache keeps subsequent runs fast. **Developed and tested with Obsidian and Quartz v5.0+.** |
 | `/claude-skills:wiki-ingest <file-or-url>` | Ingest a file, web URL, or YouTube video into an LLM-readable wiki. Extracts concepts and entities, creates cross-linked pages under `wiki/compiled/`. |
 | `/claude-skills:wiki-query <question>` | Search the local wiki and synthesize an answer with `[[wikilink]]` citations. Optionally saves the result as a new synthesis page. |
 | `/claude-skills:wiki-lint` | Audit wiki health: broken links, orphaned pages, missing frontmatter, stale entries (>90 days). Generates a report with action items. |
@@ -165,10 +165,10 @@ Add the following to `~/.claude/settings.json`:
 
 ### `/scan` — Vault Research Index Builder
 
-> **Compatibility:** Developed and tested with **Quartz v5.0+** (Debian 13, Node.js v26).
+> **Compatibility:** Developed and tested with **Obsidian** and **Quartz v5.0+** (Debian 13, Node.js v26).
 > Uses standard `[title](path)` Markdown links (not `[[wikilinks]]`) to avoid the `|` table-cell
-> parsing issue in Quartz v5's remark pipeline. Tag links use `#tag` (OFM-processed) with a
-> `\`code span\`` fallback for emoji-prefixed tags that Quartz v5 OFM regex cannot handle.
+> parsing issue in Quartz v5's remark pipeline. Tag links use Obsidian-native `#tag` notation —
+> emoji tags render correctly in Obsidian and appear as plain `#tag` text in Quartz v5 (acceptable fallback).
 
 Scans a Markdown vault and generates a browsable research index. Extracts YAML frontmatter, first-H1 title fallback, tags, creation dates, and categories. Outputs a structured report with:
 
@@ -182,9 +182,9 @@ An incremental cache (`meta_cache.json`) means repeated `/scan` calls only re-pa
 #### Usage
 
 ```
-/scan                                    → 00_INBOX/recent_index.md (all .md in repo)
+/scan                                    → 00_INBOX/index.md (all .md in repo)
 /scan --force                            → Full rescan, ignore cache
-/scan -o notes/index                     → Output to notes/index/recent_index.md
+/scan -o notes/index                     → Output to notes/index/index.md
 /scan -f my_index.md                     → Custom filename
 /scan --dirs 20_AREAS/ai-ml              → Scan only ai-ml subdirectory
 /scan --file-include md,mdx              → Include .md and .mdx files
@@ -198,7 +198,7 @@ Configure in `~/.claude/settings.local.json` → `"env"` block:
 | Variable | Default | Description |
 |---|---|---|
 | `SCAN_OUTPUT_DIR` | `00_INBOX` | Output directory (relative to repo root or absolute) |
-| `TARGET_FILENAME` | `recent_index.md` | Output filename |
+| `TARGET_FILENAME` | `index.md` | Output filename |
 | `BASE_DIR` | *(git auto-detect)* | Repository root override |
 | `SCAN_INCLUDE_DIRS` | `.` | Comma-separated directories to scan |
 | `SCAN_FILE_INCLUDE` | `md` | Extensions to include (no dot; empty = all) |
@@ -475,7 +475,7 @@ Add to `~/.claude/settings.local.json` (never committed to git):
   "env": {
     "BASE_DIR":                  "/absolute/path/to/your/workspace",
     "SCAN_OUTPUT_DIR":           "00_INBOX",
-    "TARGET_FILENAME":           "recent_index.md",
+    "TARGET_FILENAME":           "index.md",
     "SCAN_EXCLUDE_PATTERNS":     "findjob/,reports/",
     "GEMINI_API_KEY":            "your-gemini-api-key",
     "DATA_GO_KR_API_KEY":        "your-data-go-kr-api-key",
@@ -536,7 +536,7 @@ Commands that create files write to the following paths relative to your working
 |---------------|-------------|
 | `/claude-skills:new-research` | `notes/<domain>/<topic>.md` |
 | `/claude-skills:apply-research-template` | Same directory as input file |
-| `/claude-skills:scan` | `$SCAN_OUTPUT_DIR/$TARGET_FILENAME` (default: `00_INBOX/recent_index.md`) |
+| `/claude-skills:scan` | `$SCAN_OUTPUT_DIR/$TARGET_FILENAME` (default: `00_INBOX/index.md`) |
 | `/claude-skills:career-*` | `career/<subfolder>/` |
 | `/claude-skills:wiki-*` | `wiki/compiled/` |
 | `/claude-skills:apt`, `/claude-skills:apt-watch` | `reports/` |

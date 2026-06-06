@@ -80,31 +80,14 @@ def make_doc_link(vault_rel_path: str, output_path: str, repo_root: str, title: 
     return f"[{title_safe}]({path_safe})"
 
 
-def _ofm_v5_tag_safe(tag: str) -> bool:
-    """Check if tag matches Quartz v5 OFM community plugin tag regex.
-
-    v4 built-in:  /(?<=^| )#((?:[-_\\p{L}\\p{Emoji}\\p{M}\\d])+)/gu  ← emoji OK
-    v5 community: /(?<=^|\\s)#((?:[-_\\p{L}\\d])+)/gu                 ← NO emoji
-
-    Python str.isalpha() returns True for Unicode letters (a-z, Korean, etc.)
-    but False for emoji (📥, etc.), matching the \\p{L} vs \\p{Emoji} split.
-    """
-    return bool(tag) and all(c.isalpha() or c.isdigit() or c in "-_/" for c in tag)
-
-
 def make_tag_link(tag: str) -> str:
-    """Return a tag as #tag (OFM-linkable) or `tag` (code span fallback).
+    """Return a tag as Obsidian-native #tag notation.
 
-    Uses #tag notation when the tag is compatible with Quartz v5 OFM regex.
-    Falls back to a plain code span for emoji-prefixed tags (e.g. '📥-inbox')
-    since the v5 community OFM plugin tag regex excludes \\p{Emoji}.
+    Always uses #tag — Obsidian supports emoji tags natively (#📥-inbox is
+    clickable). Quartz v5 community OFM regex excludes \\p{Emoji} so emoji
+    tags appear as plain #tag text there, which is acceptable.
     """
-    if not tag:
-        return ""
-    if _ofm_v5_tag_safe(tag):
-        return f"#{tag}"
-    # Emoji or other non-letter-digit chars: show as code span, no broken link
-    return f"`{tag}`"
+    return f"#{tag}" if tag else ""
 
 
 def safe_title(title: str) -> str:
@@ -157,18 +140,21 @@ def build_summary_table(
 # ── Tags cloud ────────────────────────────────────────────────────────────────
 
 def build_tags_cloud(all_tags: Counter, max_tags: int = 60) -> list[str]:
-    """Render a compact tag cloud sorted by frequency using #tag notation."""
+    """Render a compact tag cloud sorted by frequency using #tag notation.
+
+    Uses plain spaces and · separators instead of &nbsp; HTML entities —
+    Obsidian does not render HTML entities in regular markdown paragraphs.
+    """
     lines: list[str] = []
     parts: list[str] = []
 
     for tag, cnt in all_tags.most_common(max_tags):
-        parts.append(f"{make_tag_link(tag)}&nbsp;`×{cnt}`")
+        parts.append(f"{make_tag_link(tag)} `×{cnt}`")
 
     if parts:
-        # Break into lines of ~8 tags each for readability
         chunk = 8
         for i in range(0, len(parts), chunk):
-            lines.append(" &nbsp; ".join(parts[i:i + chunk]) + "  ")
+            lines.append(" · ".join(parts[i:i + chunk]))
     else:
         lines.append("*(태그 없음)*")
 
@@ -219,9 +205,10 @@ def build_index(cache: dict, output_path: str, repo_root: str) -> str:
     # ── Compose markdown ───────────────────────────────────────────────────────
     lines: list[str] = []
 
-    # Front-matter
+    # Front-matter (title required for Quartz v5 article-title component)
     lines += [
         "---",
+        "title: Research Index",
         f"updated: {today}",
         f"total_files: {total}",
         "generated_by: /scan",
@@ -229,11 +216,7 @@ def build_index(cache: dict, output_path: str, repo_root: str) -> str:
         "",
         "# Research Index",
         "",
-        (
-            f"> **업데이트**: {today}"
-            f" &nbsp;|&nbsp; **스캔 기준**: {last_scan}"
-            f" &nbsp;|&nbsp; **총 {total}건**"
-        ),
+        f"> **업데이트**: {today} | **스캔 기준**: {last_scan} | **총 {total}건**",
         "",
         "---",
         "",

@@ -10,7 +10,7 @@ BASE_DIR="${BASE_DIR:-$(git -C "${_SCAN_LIB_DIR}" rev-parse --show-toplevel 2>/d
 
 # ── Output ───────────────────────────────────────────────────────────────────
 SCAN_OUTPUT_DIR="${SCAN_OUTPUT_DIR:-00_INBOX}"
-TARGET_FILENAME="${TARGET_FILENAME:-recent_index.md}"
+TARGET_FILENAME="${TARGET_FILENAME:-index.md}"
 
 # ── Scan scope ───────────────────────────────────────────────────────────────
 # Comma-separated list of directories relative to BASE_DIR to scan.

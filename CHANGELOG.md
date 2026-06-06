@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.5.1] — 2026-06-06
+
+### Changed (`/scan`)
+- `config.sh`: default output filename changed from `recent_index.md` → `index.md` (matches Quartz page slug convention)
+- `build_index.py`: add `title: Research Index` to YAML frontmatter (required by Quartz v5 article-title component)
+- `build_index.py`: revert emoji tag handling — always emit `#tag` notation (Obsidian renders emoji tags correctly; Quartz v5 shows them as plain text, which is acceptable)
+- `build_index.py`: remove `&nbsp;` HTML entities from tag cloud — use `·` separator and plain spaces (Obsidian does not render HTML entities in regular markdown paragraphs)
+- `extract_meta.py`: strip trailing punctuation from tags (e.g. a comma left by `"tag1, tag2"` YAML) to prevent malformed tag links
+
+---
+
 ## [1.5.0] — 2026-06-06
 
 ### Added

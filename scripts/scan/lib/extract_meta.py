@@ -138,8 +138,13 @@ def normalize_tags(raw: object) -> list[str]:
         tags = [p.lstrip("#") for p in parts if p and p != "#"]
     else:
         return []
-    # Replace internal spaces with hyphens (spaces break OFM tag regex)
-    return [re.sub(r"\s+", "-", t) for t in tags if t]
+    normalized = []
+    for t in tags:
+        t = re.sub(r"\s+", "-", t)                 # spaces → hyphens
+        t = re.sub(r"[^\w가-힣/\-]+$", "", t)       # strip trailing punctuation (e.g. comma)
+        if t:
+            normalized.append(t)
+    return normalized
 
 
 def derive_category(rel_path: str) -> str:
