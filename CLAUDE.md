@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Repo Is
 
-A Claude Code plugin published at `github:liks79/claude-skills`. It ships 22 slash commands, 2 skills, 1 agent, 7 scripts, and 5 research templates as a self-contained installable package.
+A Claude Code plugin published at `github:liks79/claude-skills`. It ships **28 slash commands, 4 skills, 1 agent, scripts, and 7 research templates** as a self-contained installable package.
 
 The plugin manifest is at `.claude-plugin/plugin.json`. The marketplace entry is `.claude-plugin/marketplace.json`. Both must have matching `version` strings when releasing.
 
@@ -52,6 +52,15 @@ Agents enforce their own scope in their procedure text — Claude Code does not 
 - All dependencies are injected at runtime via `uv run --with <dep>`. No venv or `requirements.txt`.
 - Scripts read secrets from environment variables, never from arguments.
 
+Two scripts have non-flat layouts:
+
+| Script | Layout | Notes |
+|--------|--------|-------|
+| `scripts/findjob/` | Python package | `findjob_run.py` at root is the launcher wrapper that imports it |
+| `scripts/scan/` | `scan.sh` + `lib/` subdirectory | `lib/config.sh`, `lib/extract_meta.py`, `lib/update_cache.py`, `lib/build_index.py` |
+
+`scan.sh` uses `BASH_SOURCE[0]`-based `SCRIPT_DIR` so it resolves `lib/` correctly from the plugin cache. New multi-file scripts should follow the same pattern.
+
 ### Templates (`templates/research/T<N>-*.md`)
 
 - Frontmatter must include `classification:` and `depth: standard`.
@@ -68,6 +77,13 @@ Commands cannot hardcode `scripts/` because when installed as a plugin the files
 # Script resolution
 _S=$(find "$HOME/.claude/plugins/cache" -name "<script-file>" -path "*/claude-skills/*" 2>/dev/null | sort -rV | head -1)
 [ -z "$_S" ] && _S="scripts/<script-file>"
+```
+
+For scripts with subdirectory layout (e.g. `scan.sh`), find by filename — `BASH_SOURCE[0]` inside the script handles the rest:
+
+```bash
+_S=$(find "$HOME/.claude/plugins/cache" -name "scan.sh" -path "*/claude-skills/*" 2>/dev/null | sort -rV | head -1)
+[ -z "$_S" ] && _S="scripts/scan/scan.sh"
 ```
 
 For templates:
@@ -89,8 +105,12 @@ Commands write files relative to the user's working directory, unless `$BASE_DIR
 |---------------|-------------|
 | `/new-research` | `notes/<domain>/` |
 | `/career-*` | `career/<subfolder>/` |
+| `/findjob` | `career/job-search/findjob/findjob-YYYY-MM-DD.md` + `jobs.db` |
 | `/wiki-*` | `wiki/compiled/` |
 | `/apt`, `/apt-watch` | `reports/` |
+| `/invest` | `reports/finance/investment-report-YYYY-MM-DD.md` |
+| `/newsletter` | `notes/newsletters/newsletter-{label-slug}-YYYY-MM-DD.md` |
+| `/scan` | `$SCAN_OUTPUT_DIR/$TARGET_FILENAME` (default: `00_INBOX/index.md`) |
 | `/image-gen` | `notes/image-gen/` (or `--output`) |
 
 ### BASE_DIR Support
@@ -129,4 +149,6 @@ Do not introduce `20_AREAS/`, `TEMPLATES/`, or `WIKI/` (old PARA paths) — they
 
 1. Bump `version` in `.claude-plugin/plugin.json`.
 2. Bump the same version string in `.claude-plugin/marketplace.json` (under `plugins[0].version`).
-3. Commit, tag, and push. GitHub release tags are used for pinned installs.
+3. Update the version badge and command/skill counts in `README.md`.
+4. Add a `## [X.Y.Z] — YYYY-MM-DD` entry to `CHANGELOG.md`.
+5. Commit, tag, and push. GitHub release tags are used for pinned installs.
