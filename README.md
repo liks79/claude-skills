@@ -24,7 +24,7 @@ flowchart TD
         AGENT["🤖 Agent\n━━━━━━━━━━━━━━━━━━\ncareer-researcher"]
 
         subgraph Assets["Bundled Assets"]
-            SCRIPTS["⚙️ Scripts  ×9\n━━━━━━━━━━━━━━━━━━\napt_report · apt_watch\nemail_summary · presign\ngenerate_image · github-urls\nrecent · gmail_fetch_newsletter\nfindjob (package)"]
+            SCRIPTS["⚙️ Scripts  ×10\n━━━━━━━━━━━━━━━━━━\napt_report · apt_watch\nemail_summary · presign\ngenerate_image · github-urls\nrecent · gmail_fetch_newsletter\nfindjob (package) · scan"]
             TMPLS["📄 Templates  ×7\n━━━━━━━━━━━━━━━━━━\nT1 Executive Brief\nT2 Tech Deep-Dive\nT3 Market Analysis\nT4 Comparative Eval\nT5 Strategic Roadmap\nT6 Investment Report\nT7 Newsletter Digest"]
         end
     end
@@ -48,7 +48,7 @@ flowchart TD
 | Slash Commands | 28 | Research, career, git, AI tools, productivity, finance, real estate, newsletter, job finder, vault scan |
 | Skills | 4 | `gemini` (Gemini CLI wrapper), `pptx` (PowerPoint toolkit), `invest` (portfolio analytics), `newsletter` (Gmail newsletter curation) |
 | Agent | 1 | `career-researcher` (dedicated career research sub-agent) |
-| Scripts | 9 | Python/shell scripts bundled with commands (`findjob` is a full Python package with 11 company parsers) |
+| Scripts | 10 | Python/shell scripts bundled with commands (`findjob` is a full Python package with 11 company parsers; `scan` is a bash+Python multi-file package) |
 | Templates | 7 | T1–T7 research and curation report templates |
 
 ---
@@ -120,7 +120,7 @@ Add the following to `~/.claude/settings.json`:
 | Command | Description |
 |---------|-------------|
 | `/claude-skills:ship [hint]` | Full git workflow: assess changes → create `claude/*` branch → stage → commit (Conventional Commits) → push → open PR with `gh`. |
-| `/claude-skills:github-urls [N]` | Print GitHub URLs for the N most recently changed files in the current repo. |
+| `/claude-skills:github-urls [N] [--pr N\|<sha>]` | Print GitHub URLs for the N most recently changed files. Use `--pr N` for files changed in a specific PR, or pass a commit SHA. |
 | `/claude-skills:grass-tracker [username]` | Show GitHub contribution graph status using [grass-tracker](https://github.com/liks79/grass-tracker). Falls back to basic stats via `gh api` if the CLI is not installed. |
 
 ### AI Tools
@@ -128,7 +128,7 @@ Add the following to `~/.claude/settings.json`:
 | Command | Description |
 |---------|-------------|
 | `/claude-skills:gemini <prompt> [--model] [--file] [--diff] [--summary]` | Run a prompt through Google Gemini CLI. Supports code review (`--diff`), file summarization (`--summary`), and model selection. |
-| `/claude-skills:image-gen <prompt> [--output] [--model]` | Generate images via Google Gemini API. Supports NanoBanana, NanoBanana 2, NanoBanana Pro, Imagen 4, and Imagen 4 Fast models. |
+| `/claude-skills:image-gen <prompt> [--output] [--model]` | Generate images via Google Gemini API. Supports NanoBanana, NanoBanana 2 (default), NanoBanana Pro, Imagen 4, and Imagen 4 Fast models. |
 
 ### Productivity
 
@@ -136,7 +136,7 @@ Add the following to `~/.claude/settings.json`:
 |---------|-------------|
 | `/claude-skills:email-summary [days]` | Fetch and classify Gmail messages by importance: 🔴 urgent, 🟡 important, 🔵 informational, ⚪ ads. Default: last 7 days. |
 | `/claude-skills:email-archive [N] [--dry-run]` | Fetch unread inbox messages, assign labels via AI (newsletter, career, finance, security, etc.), and archive. Default: 50 messages. Use `--dry-run` to preview without changes. |
-| `/claude-skills:newsletter --label <name\|id> [--days N]` | Fetch Gmail messages from a label, classify by topic (AI/BigTech/Startup/Tools), and generate a premium T7 intelligence digest report. Saves to `notes/newsletters/`. |
+| `/claude-skills:newsletter --label <name\|id> [--days N]` | Fetch Gmail messages from a label, classify by topic (AI/BigTech/Startup/Tools), and generate a premium T7 intelligence digest report. Saves to `notes/newsletters/`. Default: last 7 days (max 90). |
 | `/claude-skills:cal <event>` | Create or view Google Calendar events using natural language input (KST timezone). Supports Google Meet links and attendees. |
 | `/claude-skills:presign <file> [hours]` | Upload a file to Cloudflare R2 or AWS S3 and return a presigned URL. Default expiry: 24 hours. |
 | `/claude-skills:recent [N]` | List the N most recently modified files in the current directory tree. Default: 10. |
@@ -153,7 +153,7 @@ Add the following to `~/.claude/settings.json`:
 | Command | Description |
 |---------|-------------|
 | `/claude-skills:apt <region> [--months N] [--type] [--forecast N] [--pdf]` | Generate an apartment price report for Seoul/metropolitan districts using MOLIT official transaction data (data.go.kr). Includes trend charts and 6-month forecast. |
-| `/claude-skills:apt-watch <complex> [--name] [--location] [--type] [--pdf]` | Track active listings for a specific apartment complex on Naver Real Estate. Detects new and removed listings via SQLite snapshot comparison. |
+| `/claude-skills:apt-watch <complex-number\|URL> [--name] [--location] [--type] [--no-db] [--pdf]` | Track active listings for a specific apartment complex on Naver Real Estate. Accepts a complex number or full Naver URL. Detects new and removed listings via SQLite snapshot comparison. Use `--no-db` for a one-shot snapshot without writing to the change-tracking DB. |
 
 ### Meta
 
@@ -218,14 +218,14 @@ When installed as a plugin, `BASE_DIR` should point to your vault root (it defau
   "env": {
     "BASE_DIR":         "/absolute/path/to/your/vault",
     "SCAN_OUTPUT_DIR":  "00_INBOX",
-    "TARGET_FILENAME":  "recent_index.md"
+    "TARGET_FILENAME":  "index.md"
   }
 }
 ```
 
 #### Output
 
-- `$SCAN_OUTPUT_DIR/$TARGET_FILENAME` — the generated Markdown index (default: `00_INBOX/recent_index.md`)
+- `$SCAN_OUTPUT_DIR/$TARGET_FILENAME` — the generated Markdown index (default: `00_INBOX/index.md`)
 - `$SCAN_CACHE_DIR/meta_cache.json` — incremental metadata cache (auto-created; do not commit)
 
 #### Requirements
@@ -514,7 +514,7 @@ For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS
 
 ## Research Templates
 
-The `/claude-skills:new-research` and `/claude-skills:apply-research-template` commands use a five-tier template system. Templates are auto-selected from topic keywords or can be specified explicitly.
+The `/claude-skills:new-research` and `/claude-skills:apply-research-template` commands use a seven-tier template system. Templates are auto-selected from topic keywords or can be specified explicitly (T1–T5 for general research; T6 and T7 are used exclusively by `/invest` and `/newsletter`).
 
 | Template | Name | Best For | Auto-trigger keywords |
 |----------|------|----------|-----------------------|
