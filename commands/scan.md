@@ -1,10 +1,10 @@
 Scan the vault and build/update the research index at `$SCAN_OUTPUT_DIR/$TARGET_FILENAME`.
 
-> **Compatibility**: Developed and tested with **Obsidian** and **Quartz v5.0+** (Debian 13, Node.js v26).
+> **Compatibility**: Tested and verified with **Quartz v5.0+** (Debian 13, Node.js v26).
 > Link format uses standard Markdown `[title](path)` — not wikilinks — to avoid the
 > `|` table-cell parsing issue in Quartz v5's remark pipeline.
-> Tag links use Obsidian-native `#tag` notation. Emoji tags (e.g. `#📥-inbox`) render
-> correctly in Obsidian; they appear as plain `#tag` text in Quartz v5 (acceptable fallback).
+> Tag links use `#tag` (OFM-processed) with a fallback to `` `code span` `` for
+> emoji-prefixed tags incompatible with the v5 community OFM regex (`\p{L}` only, no `\p{Emoji}`).
 
 ## Environment Variables
 
@@ -13,12 +13,12 @@ Configure in `~/.claude/settings.local.json` → `"env"` block:
 | Variable | Default | Description |
 |---|---|---|
 | `SCAN_OUTPUT_DIR` | `00_INBOX` | Output directory (relative to repo root) |
-| `TARGET_FILENAME` | `recent_index.md` | Output filename |
+| `TARGET_FILENAME` | `index.md` | Output filename |
 | `BASE_DIR` | *(auto-detected)* | Repository root override |
 | `SCAN_INCLUDE_DIRS` | `.` | Comma-separated directories to scan (`.` = entire repo) |
 | `SCAN_FILE_INCLUDE` | `md` | Comma-separated extensions to **include** (no dot; empty = all) |
 | `SCAN_FILE_EXCLUDE` | *(empty)* | Comma-separated extensions to **exclude** (no dot) |
-| `SCAN_EXCLUDE_PATTERNS` | *(built-in only)* | Comma-separated additional path exclude patterns (Python regex) |
+| `SCAN_EXCLUDE_PATTERNS` | *(built-in)* | Comma-separated additional path exclude patterns (Python regex) |
 | `SCAN_CACHE_DIR` | `<repo>/.claude/scripts/scan/.cache` | Metadata cache directory |
 
 > **Built-in path excludes** (always applied regardless of env): `.git/`, `.claude/`, `.obsidian/`, `TEMPLATES/`, `WIKI/`, `Clippings/`, `Excalidraw/`, `node_modules/`, `40_ARCHIVES/`

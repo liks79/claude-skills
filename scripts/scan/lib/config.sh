@@ -32,7 +32,7 @@ SCAN_FILE_EXCLUDE="${SCAN_FILE_EXCLUDE:-}"
 # Additional user-defined path exclude patterns (comma-separated Python regex).
 # Built-in excludes (.git/, TEMPLATES/, WIKI/, .claude/, etc.) are always
 # applied in update_cache.py regardless of this setting.
-SCAN_EXCLUDE_PATTERNS="${SCAN_EXCLUDE_PATTERNS:-}"
+SCAN_EXCLUDE_PATTERNS="${SCAN_EXCLUDE_PATTERNS:-findjob/,invest-report-,investment-report-,apt-watch-,newsletter-,resume-portfolio/}"
 
 # ── Cache ────────────────────────────────────────────────────────────────────
 SCAN_CACHE_DIR="${SCAN_CACHE_DIR:-${BASE_DIR}/.claude/scripts/scan/.cache}"

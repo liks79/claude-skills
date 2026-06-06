@@ -205,16 +205,17 @@ def build_index(cache: dict, output_path: str, repo_root: str) -> str:
     # ── Compose markdown ───────────────────────────────────────────────────────
     lines: list[str] = []
 
-    # Front-matter (title required for Quartz v5 article-title component)
+    # Front-matter: use parent directory name as title so Quartz v5 explorer
+    # displays the folder by its actual name (e.g. "00_INBOX") instead of the
+    # page content title ("Research Index"), which would bury it under 'R'.
+    folder_title = Path(output_path).parent.name
     lines += [
         "---",
-        "title: Research Index",
+        f"title: {folder_title}",
         f"updated: {today}",
         f"total_files: {total}",
         "generated_by: /scan",
         "---",
-        "",
-        "# Research Index",
         "",
         f"> **업데이트**: {today} | **스캔 기준**: {last_scan} | **총 {total}건**",
         "",
