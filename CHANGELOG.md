@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.5.0] — 2026-06-06
+
+### Added
+- `/scan` command — vault research index builder ported from `staytuned-research-mono`
+  - `scripts/scan/scan.sh` — main entry point with plugin cache-aware `SCRIPT_DIR` resolution
+  - `scripts/scan/lib/config.sh` — shared defaults (all overridable via env vars)
+  - `scripts/scan/lib/extract_meta.py` — YAML frontmatter + H1 title + tag parser (stdlib only)
+  - `scripts/scan/lib/update_cache.py` — incremental metadata cache (only re-parses changed files)
+  - `scripts/scan/lib/build_index.py` — Markdown index generator with year×month matrix, tag cloud, and document list
+- `commands/scan.md` — command definition with plugin-cache path resolution pattern
+- README: `/scan` full documentation section (usage, env vars, plugin config, Quartz v5.0 compatibility notes)
+
+### Notes
+- `/scan` was developed and tested with **Quartz v5.0+**. Link format uses standard `[title](path)` Markdown links (not `[[wikilinks]]`) to avoid the `|` table-cell parsing issue in Quartz v5's remark pipeline. Tag links fall back to `` `code span` `` for emoji-prefixed tags that Quartz v5 OFM regex (`\p{L}` only, no `\p{Emoji}`) cannot handle.
+
+---
+
 ## [1.4.0] — 2026-05-31
 
 ### Added

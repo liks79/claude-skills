@@ -21,7 +21,7 @@ Dynamically read and display all `.md` files in the `.claude/commands/` director
 
    | Category | Command prefix or keyword |
    |----------|--------------------------|
-   | Research | `new-research`, `apply-research-template` |
+   | Research | `new-research`, `apply-research-template`, `scan` |
    | Career | `career-*`, `findjob` |
    | Git / GitHub | `ship`, `github-urls`, `grass-tracker` |
    | Wiki | `wiki-*` |

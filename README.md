@@ -3,9 +3,9 @@
 > A curated collection of slash commands, skills, and agents for [Claude Code](https://claude.ai/code) — covering research workflows, career development, productivity tools, and automation.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Commands](https://img.shields.io/badge/commands-27-brightgreen)
+![Commands](https://img.shields.io/badge/commands-28-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-4-brightgreen)
-![Version](https://img.shields.io/badge/version-1.4.0-orange)
+![Version](https://img.shields.io/badge/version-1.5.0-orange)
 
 ---
 
@@ -17,7 +17,7 @@ flowchart TD
 
     subgraph Plugin["📦  claude-skills  Plugin"]
         subgraph Entry["Entry Points"]
-            CMDS["📋 Commands  ×27\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · finance\nreal-estate · utils"]
+            CMDS["📋 Commands  ×28\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · finance\nreal-estate · utils"]
             SKILLS["🧠 Skills  ×4\n━━━━━━━━━━━━━━━━━━\ngemini  ·  pptx  ·  invest\nnewsletter"]
         end
 
@@ -45,7 +45,7 @@ flowchart TD
 
 | Type | Count | Contents |
 |------|-------|----------|
-| Slash Commands | 27 | Research, career, git, AI tools, productivity, finance, real estate, newsletter, job finder |
+| Slash Commands | 28 | Research, career, git, AI tools, productivity, finance, real estate, newsletter, job finder, vault scan |
 | Skills | 4 | `gemini` (Gemini CLI wrapper), `pptx` (PowerPoint toolkit), `invest` (portfolio analytics), `newsletter` (Gmail newsletter curation) |
 | Agent | 1 | `career-researcher` (dedicated career research sub-agent) |
 | Scripts | 9 | Python/shell scripts bundled with commands (`findjob` is a full Python package with 11 company parsers) |
@@ -98,6 +98,7 @@ Add the following to `~/.claude/settings.json`:
 |---------|-------------|
 | `/claude-skills:new-research <topic>` | Create a structured research note. Auto-selects one of five templates (T1–T5) based on topic keywords. Delegates career topics to the `career-researcher` agent. |
 | `/claude-skills:apply-research-template <file> [Template N] [depth]` | Restructure an existing markdown file into a research template. Supports `--inplace` to overwrite the original. |
+| `/claude-skills:scan [options]` | Scan the vault and build/update a research index. Extracts YAML frontmatter, titles, tags, and dates from all Markdown files. Generates a browsable index with year × month matrix and tag cloud. Incremental cache keeps subsequent runs fast. **Tested with Quartz v5.0+.** |
 | `/claude-skills:wiki-ingest <file-or-url>` | Ingest a file, web URL, or YouTube video into an LLM-readable wiki. Extracts concepts and entities, creates cross-linked pages under `wiki/compiled/`. |
 | `/claude-skills:wiki-query <question>` | Search the local wiki and synthesize an answer with `[[wikilink]]` citations. Optionally saves the result as a new synthesis page. |
 | `/claude-skills:wiki-lint` | Audit wiki health: broken links, orphaned pages, missing frontmatter, stale entries (>90 days). Generates a report with action items. |
@@ -159,6 +160,78 @@ Add the following to `~/.claude/settings.json`:
 | Command | Description |
 |---------|-------------|
 | `/claude-skills:cmds` | List all commands provided by this plugin, grouped by category. |
+
+---
+
+### `/scan` — Vault Research Index Builder
+
+> **Compatibility:** Developed and tested with **Quartz v5.0+** (Debian 13, Node.js v26).
+> Uses standard `[title](path)` Markdown links (not `[[wikilinks]]`) to avoid the `|` table-cell
+> parsing issue in Quartz v5's remark pipeline. Tag links use `#tag` (OFM-processed) with a
+> `\`code span\`` fallback for emoji-prefixed tags that Quartz v5 OFM regex cannot handle.
+
+Scans a Markdown vault and generates a browsable research index. Extracts YAML frontmatter, first-H1 title fallback, tags, creation dates, and categories. Outputs a structured report with:
+
+- **Year × Month matrix table** — clickable cell counts linked to monthly sections
+- **Tag cloud** — top 60 tags sorted by frequency with occurrence counts
+- **Document list** — grouped by year → month, newest first
+- **Undated files** — separate section for files without a `created:` date
+
+An incremental cache (`meta_cache.json`) means repeated `/scan` calls only re-parse changed files, keeping the command fast on large vaults.
+
+#### Usage
+
+```
+/scan                                    → 00_INBOX/recent_index.md (all .md in repo)
+/scan --force                            → Full rescan, ignore cache
+/scan -o notes/index                     → Output to notes/index/recent_index.md
+/scan -f my_index.md                     → Custom filename
+/scan --dirs 20_AREAS/ai-ml              → Scan only ai-ml subdirectory
+/scan --file-include md,mdx              → Include .md and .mdx files
+/scan --file-exclude pdf,png             → Exclude by extension
+```
+
+#### Environment Variables
+
+Configure in `~/.claude/settings.local.json` → `"env"` block:
+
+| Variable | Default | Description |
+|---|---|---|
+| `SCAN_OUTPUT_DIR` | `00_INBOX` | Output directory (relative to repo root or absolute) |
+| `TARGET_FILENAME` | `recent_index.md` | Output filename |
+| `BASE_DIR` | *(git auto-detect)* | Repository root override |
+| `SCAN_INCLUDE_DIRS` | `.` | Comma-separated directories to scan |
+| `SCAN_FILE_INCLUDE` | `md` | Extensions to include (no dot; empty = all) |
+| `SCAN_FILE_EXCLUDE` | *(empty)* | Extensions to exclude (no dot) |
+| `SCAN_EXCLUDE_PATTERNS` | *(empty)* | Additional path exclude patterns (Python regex, comma-separated) |
+| `SCAN_CACHE_DIR` | `<repo>/.claude/scripts/scan/.cache` | Metadata cache directory |
+
+**Built-in path excludes** (always applied): `.git/`, `.claude/`, `.obsidian/`, `TEMPLATES/`, `WIKI/`, `Clippings/`, `Excalidraw/`, `node_modules/`, `40_ARCHIVES/`
+
+#### Plugin configuration (installed via plugin)
+
+When installed as a plugin, `BASE_DIR` should point to your vault root (it defaults to the git root of whatever directory Claude Code is running in):
+
+```json
+// ~/.claude/settings.local.json
+{
+  "env": {
+    "BASE_DIR":         "/absolute/path/to/your/vault",
+    "SCAN_OUTPUT_DIR":  "00_INBOX",
+    "TARGET_FILENAME":  "recent_index.md"
+  }
+}
+```
+
+#### Output
+
+- `$SCAN_OUTPUT_DIR/$TARGET_FILENAME` — the generated Markdown index (default: `00_INBOX/recent_index.md`)
+- `$SCAN_CACHE_DIR/meta_cache.json` — incremental metadata cache (auto-created; do not commit)
+
+#### Requirements
+
+- `python3` or `uv` in PATH (no additional packages needed — stdlib only)
+- The vault must be a git repository (used for `BASE_DIR` auto-detection)
 
 ---
 
@@ -401,6 +474,9 @@ Add to `~/.claude/settings.local.json` (never committed to git):
 {
   "env": {
     "BASE_DIR":                  "/absolute/path/to/your/workspace",
+    "SCAN_OUTPUT_DIR":           "00_INBOX",
+    "TARGET_FILENAME":           "recent_index.md",
+    "SCAN_EXCLUDE_PATTERNS":     "findjob/,reports/",
     "GEMINI_API_KEY":            "your-gemini-api-key",
     "DATA_GO_KR_API_KEY":        "your-data-go-kr-api-key",
     "STORAGE_PROVIDER":          "r2",
@@ -414,7 +490,7 @@ Add to `~/.claude/settings.local.json` (never committed to git):
 }
 ```
 
-`BASE_DIR` is optional. When set, all commands that generate files (`/claude-skills:new-research`, `/claude-skills:career-*`, `/claude-skills:wiki-*`, `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:image-gen`, `/claude-skills:invest`) will write their output under that directory instead of the current working directory. This is useful when you work across multiple projects but want all research notes and reports in one place.
+`BASE_DIR` is optional. When set, all commands that generate files (`/claude-skills:new-research`, `/claude-skills:career-*`, `/claude-skills:wiki-*`, `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:image-gen`, `/claude-skills:invest`, `/claude-skills:scan`) will write their output under that directory instead of the current working directory. For `/scan`, `BASE_DIR` also determines which vault is scanned — set it to your vault root when running from a different working directory. This is useful when you work across multiple projects but want all research notes and reports in one place.
 
 `INVEST_DEFAULT_SHEET_URL` is required by `/claude-skills:invest` when no sheet URL is passed as an argument.
 
@@ -460,6 +536,7 @@ Commands that create files write to the following paths relative to your working
 |---------------|-------------|
 | `/claude-skills:new-research` | `notes/<domain>/<topic>.md` |
 | `/claude-skills:apply-research-template` | Same directory as input file |
+| `/claude-skills:scan` | `$SCAN_OUTPUT_DIR/$TARGET_FILENAME` (default: `00_INBOX/recent_index.md`) |
 | `/claude-skills:career-*` | `career/<subfolder>/` |
 | `/claude-skills:wiki-*` | `wiki/compiled/` |
 | `/claude-skills:apt`, `/claude-skills:apt-watch` | `reports/` |

@@ -48,6 +48,9 @@ slide-*.pdf
 *.db
 .apt-watch/
 
+# scan — incremental metadata cache (generated at runtime)
+scripts/scan/.cache/
+
 # image-gen output
 *.png
 *.jpg

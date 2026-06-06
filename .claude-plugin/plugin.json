@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "claude-skills",
-  "version": "1.4.0",
-  "description": "Research, career, finance, productivity and automation — 27 slash commands + 4 skills for Claude Code",
+  "version": "1.5.0",
+  "description": "Research, career, finance, productivity and automation — 28 slash commands + 4 skills for Claude Code",
   "author": {
     "name": "liks79",
     "url": "https://github.com/liks79"
