@@ -111,6 +111,7 @@ Commands write files relative to the user's working directory, unless `$BASE_DIR
 | `/invest` | `reports/finance/investment-report-YYYY-MM-DD.md` |
 | `/newsletter` | `notes/newsletters/newsletter-{label-slug}-YYYY-MM-DD.md` |
 | `/scan` | `$SCAN_OUTPUT_DIR/$TARGET_FILENAME` (default: `00_INBOX/index.md`) |
+| `/add-tags` | `$ADD_TAGS_OUTPUT_DIR/$ADD_TAGS_FILENAME` (default: `00_INBOX/Tag_Dictionary.md`) |
 | `/image-gen` | `notes/image-gen/` (or `--output`) |
 
 ### BASE_DIR Support

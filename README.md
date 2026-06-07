@@ -3,9 +3,9 @@
 > A curated collection of slash commands, skills, and agents for [Claude Code](https://claude.ai/code) — covering research workflows, career development, productivity tools, and automation.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Commands](https://img.shields.io/badge/commands-28-brightgreen)
+![Commands](https://img.shields.io/badge/commands-29-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-4-brightgreen)
-![Version](https://img.shields.io/badge/version-1.5.1-orange)
+![Version](https://img.shields.io/badge/version-1.5.3-orange)
 
 ---
 
@@ -17,7 +17,7 @@ flowchart TD
 
     subgraph Plugin["📦  claude-skills  Plugin"]
         subgraph Entry["Entry Points"]
-            CMDS["📋 Commands  ×28\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · finance\nreal-estate · utils"]
+            CMDS["📋 Commands  ×29\n━━━━━━━━━━━━━━━━━━\nresearch · career · git\nAI · wiki · finance\nreal-estate · utils"]
             SKILLS["🧠 Skills  ×4\n━━━━━━━━━━━━━━━━━━\ngemini  ·  pptx  ·  invest\nnewsletter"]
         end
 
@@ -45,7 +45,7 @@ flowchart TD
 
 | Type | Count | Contents |
 |------|-------|----------|
-| Slash Commands | 28 | Research, career, git, AI tools, productivity, finance, real estate, newsletter, job finder, vault scan |
+| Slash Commands | 29 | Research, career, git, AI tools, productivity, finance, real estate, newsletter, job finder, vault scan, tag management |
 | Skills | 4 | `gemini` (Gemini CLI wrapper), `pptx` (PowerPoint toolkit), `invest` (portfolio analytics), `newsletter` (Gmail newsletter curation) |
 | Agent | 1 | `career-researcher` (dedicated career research sub-agent) |
 | Scripts | 10 | Python/shell scripts bundled with commands (`findjob` is a full Python package with 11 company parsers; `scan` is a bash+Python multi-file package) |
@@ -99,6 +99,7 @@ Add the following to `~/.claude/settings.json`:
 | `/claude-skills:new-research <topic>` | Create a structured research note. Auto-selects one of five templates (T1–T5) based on topic keywords. Delegates career topics to the `career-researcher` agent. |
 | `/claude-skills:apply-research-template <file> [Template N] [depth]` | Restructure an existing markdown file into a research template. Supports `--inplace` to overwrite the original. |
 | `/claude-skills:scan [options]` | Scan the vault and build/update a research index. Extracts YAML frontmatter, titles, tags, and dates from all Markdown files. Generates a browsable index with year × month matrix and tag cloud. Incremental cache keeps subsequent runs fast. **Tested and verified with Quartz v5.0+.** |
+| `/claude-skills:add-tags [options]` | Scan an Obsidian vault and assign tags to untagged markdown files using Claude Code natively (no API key required). Builds and maintains a `Tag_Dictionary.md` with tag statistics and untagged file list. Incremental cache with surgical `--paths` rescan for fast updates. **Quartz v5 compatible.** |
 | `/claude-skills:wiki-ingest <file-or-url>` | Ingest a file, web URL, or YouTube video into an LLM-readable wiki. Extracts concepts and entities, creates cross-linked pages under `wiki/compiled/`. |
 | `/claude-skills:wiki-query <question>` | Search the local wiki and synthesize an answer with `[[wikilink]]` citations. Optionally saves the result as a new synthesis page. |
 | `/claude-skills:wiki-lint` | Audit wiki health: broken links, orphaned pages, missing frontmatter, stale entries (>90 days). Generates a report with action items. |
@@ -160,6 +161,79 @@ Add the following to `~/.claude/settings.json`:
 | Command | Description |
 |---------|-------------|
 | `/claude-skills:cmds` | List all commands provided by this plugin, grouped by category. |
+
+---
+
+### `/add-tags` — Obsidian Vault Tag Manager
+
+> **API 키 불필요** — Claude Code의 Read/Edit 툴로 파일을 직접 처리합니다. Anthropic API 호출 없음.
+> **Quartz v5 compatible**: `[title](path)` 표준 Markdown 링크 사용 (wikilink 아님).
+
+Obsidian 볼트를 스캔하고, 태그가 없는 Markdown 파일에 Claude Code가 직접 태그를 분석·추가합니다. 스캔 결과를 `Tag_Dictionary.md`로 출력하며 태그 통계표와 미태그 파일 목록을 포함합니다.
+
+**핵심 특징:**
+- **No API key** — Claude Code의 Read/Edit 툴이 태그를 직접 처리 (외부 API 없음)
+- **Incremental cache** — 변경된 파일만 재스캔, 반복 실행이 빠름
+- **Surgical `--paths` rescan** — 방금 태그한 N개 파일만 O(N)으로 재처리
+- **Quartz v5 호환** — `[tag](tags/tagname)` 링크 포맷으로 태그 페이지 연결
+
+#### Usage
+
+```
+/add-tags                               → 기본 스캔 + 태그 자동 배정 (최대 50개 파일)
+/add-tags --force                       → 캐시 무시하고 전체 재스캔
+/add-tags --no-assign                   → 스캔 + Tag Dictionary 빌드만 (태그 배정 생략)
+/add-tags --delta                       → 캐시보다 새로운 파일만 빠르게 스캔
+/add-tags --paths "a.md,b.md"           → 지정 파일만 surgical 재스캔
+/add-tags --max-files 20                → 한 번에 처리할 최대 파일 수 조정
+/add-tags --output-dir notes            → Tag Dictionary 출력 디렉토리 지정
+/add-tags --include-dirs 10_PARA,notes  → 스캔할 디렉토리 지정 (기본: 전체)
+```
+
+#### Scan Mode Reference
+
+| Mode | When to use | Speed |
+|------|-------------|-------|
+| `--paths "f1,f2"` | 방금 태그한 파일 N개만 재스캔 | ⚡ Fastest |
+| *(auto, cache 있음)* | 기본값 — 캐시보다 새 파일만 delta 스캔 | 🚀 Fast |
+| `--force` | 전체 재빌드 / 삭제 파일 정리 | 🐢 Slow |
+| *(auto, 첫 실행)* | 캐시 없음 → 전체 walk로 초기화 | 🐢 Slow |
+
+#### Environment Variables
+
+Configure in `~/.claude/settings.local.json` → `"env"` block:
+
+| Variable | Default | Description |
+|---|---|---|
+| `ADD_TAGS_OUTPUT_DIR` | `00_INBOX` | `Tag_Dictionary.md` 출력 디렉토리 |
+| `ADD_TAGS_FILENAME` | `Tag_Dictionary.md` | 출력 파일명 |
+| `ADD_TAGS_CACHE_DIR` | `<script_dir>/.cache` | 태그 캐시 디렉토리 |
+
+#### Plugin configuration (installed via plugin)
+
+```json
+// ~/.claude/settings.local.json
+{
+  "env": {
+    "BASE_DIR":           "/absolute/path/to/your/vault",
+    "ADD_TAGS_OUTPUT_DIR": "00_INBOX",
+    "ADD_TAGS_FILENAME":   "Tag_Dictionary.md",
+    "ADD_TAGS_CACHE_DIR":  "/absolute/path/to/your/vault/.cache/add-tags"
+  }
+}
+```
+
+> **`ADD_TAGS_CACHE_DIR` 권장 설정**: 플러그인으로 설치 시 스크립트는 plugin cache 디렉토리에 위치하므로, 캐시를 vault 내부에 유지하려면 절대 경로로 명시하세요. 설정하지 않으면 plugin cache 내부에 캐시가 생성됩니다.
+
+#### Output
+
+- `$ADD_TAGS_OUTPUT_DIR/Tag_Dictionary.md` — 태그 통계 + 미태그 파일 목록 (기본: `00_INBOX/Tag_Dictionary.md`)
+- `$ADD_TAGS_CACHE_DIR/tag_cache.json` — 증분 태그 캐시 (자동 생성, 커밋 불필요)
+
+#### Requirements
+
+- `uv` in PATH (Python 스크립트 실행에 사용)
+- The vault must be a git repository (used for repo root auto-detection)
 
 ---
 

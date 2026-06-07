@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.5.3] — 2026-06-07
+
+### Added (`/add-tags`)
+- New command `/add-tags` — Obsidian vault tag manager synced from `staytuned-research-mono`
+- `scripts/add-tags/add_tags.sh`: Phase 1 (scan) and Phase 3 (build Tag Dictionary) shell orchestrator; uses `BASH_SOURCE[0]`-based `SCRIPT_DIR` for plugin-cache compatibility
+- `scripts/add-tags/lib/scanner.py`: Phase 1 vault scanner with four scan modes (paths/delta/incremental/full) and incremental tag index update (O(changed_files))
+- `scripts/add-tags/lib/builder.py`: Phase 3 Tag_Dictionary.md builder; Quartz v5 compatible `[tag](tags/tagname)` links
+- `scripts/add-tags/lib/tagger.py`: standalone Claude API tagger (Phase 2 via Anthropic SDK, optional)
+- `scripts/add-tags/list_untagged.py`: JSON helper that outputs untagged files + existing vocab for Claude Code native tagging (no API key required)
+- `commands/add-tags.md`: command procedure with plugin-cache path resolution (`find ~/.claude/plugins/cache`)
+- `README.md`: `/add-tags` section with usage examples, scan mode table, environment variables, plugin config example
+- `CLAUDE.md`: output path entry for `/add-tags`
+
+---
+
 ## [1.5.2] — 2026-06-06
 
 ### Changed (`/scan`)
