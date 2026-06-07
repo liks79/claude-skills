@@ -166,38 +166,38 @@ Add the following to `~/.claude/settings.json`:
 
 ### `/add-tags` — Obsidian Vault Tag Manager
 
-> **API 키 불필요** — Claude Code의 Read/Edit 툴로 파일을 직접 처리합니다. Anthropic API 호출 없음.
-> **Quartz v5 compatible**: `[title](path)` 표준 Markdown 링크 사용 (wikilink 아님).
+> **No API key required** — Claude Code handles all tagging via its native Read/Edit tools. No Anthropic API calls.
+> **Quartz v5 compatible**: uses standard `[title](path)` Markdown links (not wikilinks).
 
-Obsidian 볼트를 스캔하고, 태그가 없는 Markdown 파일에 Claude Code가 직접 태그를 분석·추가합니다. 스캔 결과를 `Tag_Dictionary.md`로 출력하며 태그 통계표와 미태그 파일 목록을 포함합니다.
+Scans an Obsidian vault and assigns tags to untagged Markdown files using Claude Code natively. Outputs a `Tag_Dictionary.md` with a tag statistics table and a list of untagged files.
 
-**핵심 특징:**
-- **No API key** — Claude Code의 Read/Edit 툴이 태그를 직접 처리 (외부 API 없음)
-- **Incremental cache** — 변경된 파일만 재스캔, 반복 실행이 빠름
-- **Surgical `--paths` rescan** — 방금 태그한 N개 파일만 O(N)으로 재처리
-- **Quartz v5 호환** — `[tag](tags/tagname)` 링크 포맷으로 태그 페이지 연결
+**Key features:**
+- **No API key** — Claude Code's Read/Edit tools process files directly (no external API)
+- **Incremental cache** — only re-scans changed files; repeated runs stay fast
+- **Surgical `--paths` rescan** — after tagging N files, re-reads only those N files O(N) instead of O(total)
+- **Quartz v5 compatible** — `[tag](tags/tagname)` link format for tag page navigation
 
 #### Usage
 
 ```
-/add-tags                               → 기본 스캔 + 태그 자동 배정 (최대 50개 파일)
-/add-tags --force                       → 캐시 무시하고 전체 재스캔
-/add-tags --no-assign                   → 스캔 + Tag Dictionary 빌드만 (태그 배정 생략)
-/add-tags --delta                       → 캐시보다 새로운 파일만 빠르게 스캔
-/add-tags --paths "a.md,b.md"           → 지정 파일만 surgical 재스캔
-/add-tags --max-files 20                → 한 번에 처리할 최대 파일 수 조정
-/add-tags --output-dir notes            → Tag Dictionary 출력 디렉토리 지정
-/add-tags --include-dirs 10_PARA,notes  → 스캔할 디렉토리 지정 (기본: 전체)
+/add-tags                               → default scan + auto-assign tags (up to 50 files)
+/add-tags --force                       → full rescan, ignore cache
+/add-tags --no-assign                   → scan + build Tag Dictionary only (skip assignment)
+/add-tags --delta                       → fast scan: only files newer than cache
+/add-tags --paths "a.md,b.md"           → surgical rescan of specific files only
+/add-tags --max-files 20                → limit files processed per run
+/add-tags --output-dir notes            → override Tag Dictionary output directory
+/add-tags --include-dirs 10_PARA,notes  → restrict scan to specific directories (default: all)
 ```
 
 #### Scan Mode Reference
 
 | Mode | When to use | Speed |
 |------|-------------|-------|
-| `--paths "f1,f2"` | 방금 태그한 파일 N개만 재스캔 | ⚡ Fastest |
-| *(auto, cache 있음)* | 기본값 — 캐시보다 새 파일만 delta 스캔 | 🚀 Fast |
-| `--force` | 전체 재빌드 / 삭제 파일 정리 | 🐢 Slow |
-| *(auto, 첫 실행)* | 캐시 없음 → 전체 walk로 초기화 | 🐢 Slow |
+| `--paths "f1,f2"` | Re-scan exactly the N files you just tagged | ⚡ Fastest |
+| *(auto, cache exists)* | Default — delta scan via `find -newer cache` | 🚀 Fast |
+| `--force` | Full rebuild or purge entries for deleted files | 🐢 Slow |
+| *(auto, first run)* | No cache yet — full walk to initialize | 🐢 Slow |
 
 #### Environment Variables
 
@@ -205,9 +205,9 @@ Configure in `~/.claude/settings.local.json` → `"env"` block:
 
 | Variable | Default | Description |
 |---|---|---|
-| `ADD_TAGS_OUTPUT_DIR` | `00_INBOX` | `Tag_Dictionary.md` 출력 디렉토리 |
-| `ADD_TAGS_FILENAME` | `Tag_Dictionary.md` | 출력 파일명 |
-| `ADD_TAGS_CACHE_DIR` | `<script_dir>/.cache` | 태그 캐시 디렉토리 |
+| `ADD_TAGS_OUTPUT_DIR` | `00_INBOX` | Output directory for `Tag_Dictionary.md` |
+| `ADD_TAGS_FILENAME` | `Tag_Dictionary.md` | Output filename |
+| `ADD_TAGS_CACHE_DIR` | `<script_dir>/.cache` | Tag cache directory |
 
 #### Plugin configuration (installed via plugin)
 
@@ -223,16 +223,16 @@ Configure in `~/.claude/settings.local.json` → `"env"` block:
 }
 ```
 
-> **`ADD_TAGS_CACHE_DIR` 권장 설정**: 플러그인으로 설치 시 스크립트는 plugin cache 디렉토리에 위치하므로, 캐시를 vault 내부에 유지하려면 절대 경로로 명시하세요. 설정하지 않으면 plugin cache 내부에 캐시가 생성됩니다.
+> **`ADD_TAGS_CACHE_DIR` recommendation**: when installed as a plugin, scripts live inside the plugin cache directory. Set an absolute path inside your vault to keep the cache co-located with your content. If unset, the cache is written inside the plugin cache directory.
 
 #### Output
 
-- `$ADD_TAGS_OUTPUT_DIR/Tag_Dictionary.md` — 태그 통계 + 미태그 파일 목록 (기본: `00_INBOX/Tag_Dictionary.md`)
-- `$ADD_TAGS_CACHE_DIR/tag_cache.json` — 증분 태그 캐시 (자동 생성, 커밋 불필요)
+- `$ADD_TAGS_OUTPUT_DIR/Tag_Dictionary.md` — tag statistics + untagged file list (default: `00_INBOX/Tag_Dictionary.md`)
+- `$ADD_TAGS_CACHE_DIR/tag_cache.json` — incremental tag cache (auto-created; do not commit)
 
 #### Requirements
 
-- `uv` in PATH (Python 스크립트 실행에 사용)
+- `uv` in PATH (used to run Python scripts)
 - The vault must be a git repository (used for repo root auto-detection)
 
 ---
