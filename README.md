@@ -62,10 +62,11 @@ flowchart TD
 /plugin install claude-skills@liks79-skills
 ```
 
-### Option 2 — Direct Install
+### Option 2 — CLI (two steps)
 
 ```bash
-claude plugin install liks79/claude-skills --scope user
+claude plugin marketplace add liks79/claude-skills
+claude plugin install claude-skills@liks79-skills --scope user
 ```
 
 ### Option 3 — Manual (`settings.json`)

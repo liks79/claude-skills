@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.5.4] — 2026-06-08
+
+### Fixed
+- **Installation**: Option 2 in README used `claude plugin install liks79/claude-skills --scope user` which fails with `Plugin not found in any configured marketplace` because `liks79` is not a built-in marketplace alias. Replaced with the correct two-step CLI flow: `claude plugin marketplace add liks79/claude-skills` → `claude plugin install claude-skills@liks79-skills --scope user`.
+
+---
+
 ## [1.5.3] — 2026-06-07
 
 ### Added (`/add-tags`)
