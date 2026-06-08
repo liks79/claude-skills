@@ -5,7 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Commands](https://img.shields.io/badge/commands-29-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-4-brightgreen)
-![Version](https://img.shields.io/badge/version-1.5.3-orange)
+![Version](https://img.shields.io/badge/version-1.5.5-orange)
 
 ---
 
@@ -55,7 +55,11 @@ flowchart TD
 
 ## Installation
 
-### Option 1 — Via Marketplace (Recommended)
+> **Note**: Installation requires two steps — first register the marketplace, then install the plugin.
+> Running `claude plugin install liks79/claude-skills` directly will fail with "not found in any configured marketplace"
+> because `liks79/claude-skills` is a GitHub repo path, not a marketplace plugin identifier.
+
+### Option 1 — Via Marketplace slash commands (Recommended)
 
 ```
 /plugin marketplace add liks79/claude-skills
@@ -65,7 +69,10 @@ flowchart TD
 ### Option 2 — CLI (two steps)
 
 ```bash
+# Step 1: Register the marketplace (required before install)
 claude plugin marketplace add liks79/claude-skills
+
+# Step 2: Install the plugin using the marketplace plugin identifier
 claude plugin install claude-skills@liks79-skills --scope user
 ```
 

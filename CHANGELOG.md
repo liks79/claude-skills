@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.5.5] — 2026-06-08
+
+### Fixed
+- **Installation docs**: Clarified two-step install requirement in README to prevent `Plugin not found in any configured marketplace` error. Added a Note block explaining that `liks79/claude-skills` is a GitHub repo path (used for `marketplace add`), not a plugin identifier — users must run `marketplace add` before `plugin install claude-skills@liks79-skills`. Added inline comments to the CLI code block marking each step.
+
+---
+
 ## [1.5.4] — 2026-06-08
 
 ### Fixed
