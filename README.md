@@ -5,7 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Commands](https://img.shields.io/badge/commands-29-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-4-brightgreen)
-![Version](https://img.shields.io/badge/version-1.5.5-orange)
+![Version](https://img.shields.io/badge/version-1.5.6-orange)
 
 ---
 
@@ -155,7 +155,7 @@ Add the following to `~/.claude/settings.json`:
 | Command | Description |
 |---------|-------------|
 | `/invest [sheet_url]` | Read a Google Sheets investment portfolio via GWS CLI, fetch live market data, and generate a premium T6-template report covering allocation, performance, market intelligence, risk matrix, and action plan. Saves to `reports/finance/`. |
-| `/share [md_path] [hours]` | Convert the most recent research `.md` to PDF and upload it to Cloudflare R2, returning a presigned URL (and optionally a Quartz URL). Defaults to the most recently modified file under `notes/` or `reports/`. |
+| `/claude-skills:share [md_path] [hours]` | Convert the most recent research `.md` to PDF via the `pdf-creator` plugin and upload to Cloudflare R2, returning a presigned URL (and optionally a Quartz URL). Defaults to the most recently modified file under `notes/` or `reports/`. **Requires:** `daymade-skills/pdf-creator` plugin installed. |
 
 ### Korea Real Estate
 
@@ -242,6 +242,56 @@ Configure in `~/.claude/settings.local.json` → `"env"` block:
 
 - `uv` in PATH (used to run Python scripts)
 - The vault must be a git repository (used for repo root auto-detection)
+
+---
+
+### `/share` — PDF 변환 & 공유 URL 생성
+
+> **External plugin required:** `daymade-skills/pdf-creator` — install it before using `/share`.
+
+Converts a Markdown research note to PDF using the `pdf-creator` plugin and uploads it to Cloudflare R2, returning a presigned URL. Optionally also returns a Quartz static-site URL if `QUARTZ_BASE_URL` is configured.
+
+#### Usage
+
+```
+/claude-skills:share                          → auto-selects most recently modified .md under notes/ or reports/
+/claude-skills:share <md_path>                → use specified file (relative to repo root)
+/claude-skills:share <hours>                  → set URL validity duration (default: 24h)
+/claude-skills:share <md_path> <hours>
+```
+
+#### Installing the pdf-creator dependency
+
+```
+/plugin marketplace add daymade-skills/pdf-creator
+/plugin install pdf-creator@daymade-skills
+```
+
+Or via CLI:
+
+```bash
+claude plugin marketplace add daymade-skills/pdf-creator
+claude plugin install pdf-creator@daymade-skills --scope user
+```
+
+#### Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `R2_ACCOUNT_ID` | ✅ | Cloudflare account ID |
+| `R2_ACCESS_KEY_ID` | ✅ | R2 access key ID |
+| `R2_SECRET_ACCESS_KEY` | ✅ | R2 secret access key |
+| `R2_BUCKET_NAME` | ✅ | R2 bucket name |
+| `QUARTZ_BASE_URL` | optional | When set, appends a Quartz URL (e.g., `http://your-host:7000`) |
+
+#### Error Handling
+
+| Error | Response |
+|-------|----------|
+| No `.md` file found | Notify user and abort |
+| `pdf-creator` plugin not installed | Guide user to install from Marketplace |
+| PDF conversion failed | Show stderr and abort |
+| R2 credentials not configured | Point to `/presign` configuration guide |
 
 ---
 
@@ -598,6 +648,7 @@ For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS
 | `/claude-skills:apt`, `/claude-skills:apt-watch`, `/claude-skills:presign`, `/claude-skills:share`, `/claude-skills:email-summary`, `/claude-skills:image-gen`, `/claude-skills:invest`, `/claude-skills:findjob`, `/claude-skills:newsletter` | [uv](https://docs.astral.sh/uv/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
 | `/claude-skills:career-to-pptx` | `python-pptx` | Installed automatically via `uv add python-pptx` |
 | `pptx` skill | LibreOffice, Poppler | `apt install libreoffice poppler-utils` |
+| `/claude-skills:share` | `daymade-skills/pdf-creator` plugin | `/plugin marketplace add daymade-skills/pdf-creator` then `/plugin install pdf-creator@daymade-skills` |
 
 ---
 

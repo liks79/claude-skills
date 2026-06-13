@@ -35,5 +35,6 @@ Create a new research note for the topic: $ARGUMENTS
    - If `$BASE_DIR` is not set, path is relative to the current working directory
    - Adjust section depth based on the frontmatter `depth` value
    - Remove `<!-- depth: ... -->` comments from the final file
+   - **Always use standard Markdown tables** (`| col | col |` with `|---|---|` separator) for all tabular data. Never use ASCII box-drawing characters (┌ ├ └ │ ─ ┬ ┼ ┴ etc.) for tables. ASCII art may only be used inside fenced code blocks (` ``` `) when illustrating code-level concepts such as architecture diagrams, data flow, or CLI output where the box-drawing is part of the content being described.
 
 5. Notify the user of the save path, selected template (T1–T5), and depth.

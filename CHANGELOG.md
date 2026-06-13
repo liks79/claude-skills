@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.5.6] — 2026-06-12
+
+### Changed
+- **`/new-research`**: Added Markdown table formatting rule to Step 4 — always use standard `| col |` tables; never use ASCII box-drawing characters (┌ ├ └ etc.) outside fenced code blocks. Synced from `staytuned-research-mono` commit `0ba73aa`.
+- **`templates/research/_registry.md`**: Added `/invest` → T6 and `/newsletter` → T7 command mappings to the Command × Template table. Updated T6/T7 classification labels to match upstream (INVESTMENT PORTFOLIO REPORT, NEWSLETTER INTELLIGENCE DIGEST).
+- **`README.md`**: Added dedicated `/share` section with pdf-creator plugin install instructions, environment variable table, and error handling reference. Added `daymade-skills/pdf-creator` to External CLI Requirements.
+
+---
+
 ## [1.5.5] — 2026-06-08
 
 ### Fixed

@@ -14,8 +14,8 @@
 | T3 | `templates/research/T3-market-analysis.md` | MARKET ANALYSIS | CB Insights / McKinsey |
 | T4 | `templates/research/T4-comparative-evaluation.md` | COMPARATIVE EVALUATION | Forrester Wave |
 | T5 | `templates/research/T5-strategic-roadmap.md` | STRATEGIC ROADMAP | Deloitte Tech Trends |
-| T6 | `templates/research/T6-investment-report.md` | INVESTMENT REPORT | Used by `/invest` |
-| T7 | `templates/research/T7-newsletter-curation.md` | NEWSLETTER DIGEST | Used by `/newsletter` |
+| T6 | `templates/research/T6-investment-report.md` | INVESTMENT PORTFOLIO REPORT | Goldman Sachs / Samsung Securities |
+| T7 | `templates/research/T7-newsletter-curation.md` | NEWSLETTER INTELLIGENCE DIGEST | a16z / The Information / Morning Brew Pro |
 
 ---
 
@@ -28,6 +28,8 @@
 | `/career-company-analysis` | **T3** Market Analysis | T1 Brief | 심층=T3, 빠른 조회=T1 |
 | `/career-salary-research` | **T3** Market Analysis | T4 Comparative | 시장 전체=T3, 회사 비교=T4 |
 | `/career-interview-prep` | **T5** Strategic Roadmap | T2 Deep-Dive | 준비 계획=T5, 기술 분석=T2 |
+| `/invest` | **T6** Investment Report | — | 항상 T6 고정 사용 |
+| `/newsletter` | **T7** Newsletter Curation | — | 항상 T7 고정 사용 |
 
 ---
 
