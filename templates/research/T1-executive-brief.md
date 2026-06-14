@@ -12,6 +12,8 @@ depth: standard          # quick | standard | deep | exhaustive
 
 **Published**: YYYY-MM-DD | **Area**: [domain] | **Confidence**: ⭐⭐⭐⭐☆
 
+<div style="margin:6px 0 12px;">🧭 Researched by StayTuned-CC Agent @liveloop.app</div>
+
 ---
 
 ## Executive Summary

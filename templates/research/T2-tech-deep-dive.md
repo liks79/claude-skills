@@ -11,6 +11,8 @@ depth: standard          # quick | standard | deep | exhaustive
 
 **Date**: YYYY-MM-DD | **Area**: [domain] | **Status**: 🔬 In Progress → ✅ Completed
 
+<div style="margin:6px 0 12px;">🧭 Researched by StayTuned-CC Agent @liveloop.app</div>
+
 ---
 
 ## Abstract

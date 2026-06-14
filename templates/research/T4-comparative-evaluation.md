@@ -10,6 +10,8 @@ depth: standard          # quick | standard | deep | exhaustive
 
 **Date**: YYYY-MM-DD | **Evaluator**: [팀/개인] | **Decision Deadline**: YYYY-MM-DD
 
+<div style="margin:6px 0 12px;">🧭 Researched by StayTuned-CC Agent @liveloop.app</div>
+
 ---
 
 ## Abstract

@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.5.7] — 2026-06-14
+
+### Changed
+- **Templates T1–T5**: Replaced image-based agent profile with emoji byline `🧭 Researched by StayTuned-CC Agent @liveloop.app` (HTML div, no external image dependency). Synced from `staytuned-research-mono` commits `2dc19bc` (#175) and `c9cc213` (#176).
+- **`/new-research`**: Updated Step 4 "Byline" note to document the new emoji-based `<div>` format.
+- **`README.md`**: Added byline documentation to Research Templates section.
+
+---
+
 ## [1.5.6] — 2026-06-12
 
 ### Changed

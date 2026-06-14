@@ -10,6 +10,8 @@ depth: standard          # quick | standard | deep | exhaustive
 
 **Date**: YYYY-MM-DD | **Scope**: [지역/산업] | **Data As Of**: YYYY
 
+<div style="margin:6px 0 12px;">🧭 Researched by StayTuned-CC Agent @liveloop.app</div>
+
 ---
 
 ## Executive Summary

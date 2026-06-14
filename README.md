@@ -5,7 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Commands](https://img.shields.io/badge/commands-29-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-4-brightgreen)
-![Version](https://img.shields.io/badge/version-1.5.6-orange)
+![Version](https://img.shields.io/badge/version-1.5.7-orange)
 
 ---
 
@@ -665,6 +665,14 @@ The `/claude-skills:new-research` and `/claude-skills:apply-research-template` c
 | T5 | Strategic Roadmap | Plans, phases, milestones | "strategy", "roadmap", "plan" |
 | T6 | Investment Report | Portfolio analysis with charts | Used exclusively by `/invest` |
 | T7 | Newsletter Digest | Gmail newsletter intelligence digest | Used exclusively by `/newsletter` |
+
+Each generated note (T1–T5) includes a byline block immediately after the metadata line:
+
+```html
+<div style="margin:6px 0 12px;">🧭 Researched by StayTuned-CC Agent @liveloop.app</div>
+```
+
+This renders as a compact inline label in Quartz v5 / Obsidian. Do not remove or modify it when applying templates.
 
 ---
 
