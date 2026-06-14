@@ -245,7 +245,7 @@ Configure in `~/.claude/settings.local.json` → `"env"` block:
 
 ---
 
-### `/share` — PDF 변환 & 공유 URL 생성
+### `/share` — Convert to PDF and Generate Shareable URL
 
 > **External plugin required:** `daymade-skills/pdf-creator` — install it before using `/share`.
 
