@@ -36,6 +36,7 @@ Create a new research note for the topic: $ARGUMENTS
    - Adjust section depth based on the frontmatter `depth` value
    - Remove `<!-- depth: ... -->` comments from the final file
    - **Always use standard Markdown tables** (`| col | col |` with `|---|---|` separator) for all tabular data. Never use ASCII box-drawing characters (┌ ├ └ │ ─ ┬ ┼ ┴ etc.) for tables. ASCII art may only be used inside fenced code blocks (` ``` `) when illustrating code-level concepts such as architecture diagrams, data flow, or CLI output where the box-drawing is part of the content being described.
+   - **Mermaid line breaks** — Inside Mermaid node labels, always use `<br/>` for line breaks. Never use `\n` (literal backslash-n), which renders as the two characters `\n` in Quartz and Obsidian instead of a newline. Example: `A[Line one<br/>Line two]` ✅ · `A[Line one\nLine two]` ❌
    - **Byline** — The template already includes the byline block. Do not remove or alter it: `<div style="margin:6px 0 12px;">🧭 Researched by StayTuned-CC Agent @liveloop.app</div>`
 
 5. Notify the user of the save path, selected template (T1–T5), and depth.

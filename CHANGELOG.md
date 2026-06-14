@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.5.8] — 2026-06-14
+
+### Fixed
+- **`templates/research/T2-tech-deep-dive.md`**: Replaced `\n` with `<br/>` in a Mermaid flowchart node label. `\n` renders as the literal two-character sequence `\n` in Quartz v5 and Obsidian instead of a line break. Synced from `staytuned-research-mono` commit `ba55723` (#178).
+
+### Changed
+- **`/new-research`**: Added explicit Mermaid line-break rule to Step 4 — always use `<br/>` inside node labels, never `\n`.
+- **`README.md`**: Added Mermaid Rendering Rules section to the Research Templates documentation.
+
+---
+
 ## [1.5.7] — 2026-06-14
 
 ### Changed

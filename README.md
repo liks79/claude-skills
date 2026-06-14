@@ -5,7 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Commands](https://img.shields.io/badge/commands-29-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-4-brightgreen)
-![Version](https://img.shields.io/badge/version-1.5.7-orange)
+![Version](https://img.shields.io/badge/version-1.5.8-orange)
 
 ---
 
@@ -673,6 +673,17 @@ Each generated note (T1–T5) includes a byline block immediately after the meta
 ```
 
 This renders as a compact inline label in Quartz v5 / Obsidian. Do not remove or modify it when applying templates.
+
+### Mermaid Rendering Rules
+
+When generating Mermaid diagrams in research notes, follow these rules to ensure correct rendering in Quartz v5 and Obsidian:
+
+| Rule | Correct ✅ | Wrong ❌ |
+|------|-----------|---------|
+| Line breaks in node labels | `A[Line one<br/>Line two]` | `A[Line one\nLine two]` |
+| Table data | Standard `\| col \|` Markdown tables | ASCII box-drawing characters (┌ ├ └ etc.) |
+
+`\n` inside a Mermaid node label renders as the literal two characters `\` and `n` in Quartz and Obsidian — use `<br/>` instead. ASCII box-drawing is only permitted inside fenced code blocks (` ``` `) for architecture diagrams or CLI output illustrations.
 
 ---
 

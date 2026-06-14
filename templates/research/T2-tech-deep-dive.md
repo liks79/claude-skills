@@ -132,7 +132,7 @@ quadrantChart
 
 ```mermaid
 flowchart TD
-    START([이 기술 도입 고려?]) --> Q1{규모가\n소/중/대?}
+    START([이 기술 도입 고려?]) --> Q1{규모가<br/>소/중/대?}
     Q1 -->|소| A1[Option A 추천]
     Q1 -->|중| A2[Option B 추천]
     Q1 -->|대| Q2{팀 전문성?}
