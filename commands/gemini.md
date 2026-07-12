@@ -1,4 +1,4 @@
-Ask questions or perform tasks using Gemini CLI with Google Gemini AI. $ARGUMENTS
+Ask questions or perform tasks using Antigravity CLI (agy) with Google Gemini AI. $ARGUMENTS
 
 ---
 
@@ -6,7 +6,7 @@ Ask questions or perform tasks using Gemini CLI with Google Gemini AI. $ARGUMENT
 
 ```
 /gemini <question or prompt>
-/gemini <question> --model gemini-2.5-pro
+/gemini <question> --model "Gemini 3.1 Pro (High)"
 /gemini <question> --file <file_path>
 /gemini --diff          Code review of current git diff using Gemini
 /gemini --summary <file_path>   Summarize file contents
@@ -16,10 +16,23 @@ Ask questions or perform tasks using Gemini CLI with Google Gemini AI. $ARGUMENT
 
 | Option | Description |
 |--------|-------------|
-| `--model <id>` | Specify model (default: gemini-2.5-flash) |
+| `--model <name>` | Specify model (default: `Gemini 3.5 Flash (Medium)`) |
 | `--file <path>` | Pass file contents along with the prompt |
 | `--diff` | Code review of `git diff` output using Gemini |
 | `--summary <path>` | Summarize a file |
+
+## Available Models
+
+| Model | Notes |
+|-------|-------|
+| `Gemini 3.5 Flash (Medium)` | Default — fast, balanced |
+| `Gemini 3.5 Flash (High)` | Higher quality Gemini Flash |
+| `Gemini 3.5 Flash (Low)` | Fastest Gemini Flash |
+| `Gemini 3.1 Pro (Low)` | Gemini Pro, lower quota |
+| `Gemini 3.1 Pro (High)` | Gemini Pro, higher quality |
+| `Claude Sonnet 4.6 (Thinking)` | Claude via agy |
+| `Claude Opus 4.6 (Thinking)` | Claude Opus via agy |
+| `GPT-OSS 120B (Medium)` | Open-source GPT via agy |
 
 ## Procedure
 
@@ -30,45 +43,46 @@ Analyze `$ARGUMENTS`:
 - If `--diff` flag is present → code review mode, passing git diff via stdin
 - If `--summary <path>` is present → file summarization mode
 - If `--file <path>` is present → pass file contents along with the prompt
-- If `--model <id>` is present → add `-m <id>` flag
+- If `--model <name>` is present → add `--model "<name>"` flag; otherwise omit (agy defaults to `Gemini 3.5 Flash (Medium)`)
 - Remaining text → use as the prompt
 
 ### Step 2 — Execute Command
 
 **General question:**
 ```bash
-gemini -p "<prompt>"
+agy -p "<prompt>"
 ```
 
 **Including file contents:**
 ```bash
-cat "<file_path>" | gemini -p "<prompt>"
+cat "<file_path>" | agy -p "<prompt>"
 ```
 
 **git diff code review:**
 ```bash
-git diff | gemini -p "Please review these code changes. List any potential bugs, improvements, and code quality issues by category."
+git diff | agy -p "Please review these code changes. List any potential bugs, improvements, and code quality issues by category."
 ```
 
 **File summarization:**
 ```bash
-cat "<file_path>" | gemini -p "Summarize the key content of this document. Include main points, conclusions, and action items."
+cat "<file_path>" | agy -p "Summarize the key content of this document. Include main points, conclusions, and action items."
 ```
 
 **Specify model:**
 ```bash
-gemini -m <model-id> -p "<prompt>"
+agy --model "<model-name>" -p "<prompt>"
 ```
 
 ### Step 3 — Display Results
 
-Show Gemini's response to the user as-is.
+Show the response to the user as-is.
 If the response is long, also provide a brief summary of the key points.
 
 ### Step 4 — Error Handling
 
 | Error | Response |
 |-------|----------|
-| `GEMINI_API_KEY` not set | Ask user to add the key to the `env` block in `settings.local.json` |
+| Auth / login error | Run `agy` interactively in a terminal to complete login |
 | No response / timeout | Simplify the prompt and retry |
 | File not found | Ask user to recheck the file path |
+| Unknown model name | Run `agy models` to list valid names and pick the closest match |

@@ -5,7 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Commands](https://img.shields.io/badge/commands-29-brightgreen)
 ![Skills](https://img.shields.io/badge/skills-4-brightgreen)
-![Version](https://img.shields.io/badge/version-1.5.8-orange)
+![Version](https://img.shields.io/badge/version-1.5.9-orange)
 
 ---
 
@@ -46,7 +46,7 @@ flowchart TD
 | Type | Count | Contents |
 |------|-------|----------|
 | Slash Commands | 29 | Research, career, git, AI tools, productivity, finance, real estate, newsletter, job finder, vault scan, tag management |
-| Skills | 4 | `gemini` (Gemini CLI wrapper), `pptx` (PowerPoint toolkit), `invest` (portfolio analytics), `newsletter` (Gmail newsletter curation) |
+| Skills | 4 | `gemini` (Antigravity CLI / agy wrapper), `pptx` (PowerPoint toolkit), `invest` (portfolio analytics), `newsletter` (Gmail newsletter curation) |
 | Agent | 1 | `career-researcher` (dedicated career research sub-agent) |
 | Scripts | 10 | Python/shell scripts bundled with commands (`findjob` is a full Python package with 11 company parsers; `scan` is a bash+Python multi-file package) |
 | Templates | 7 | T1–T7 research and curation report templates |
@@ -136,7 +136,7 @@ Add the following to `~/.claude/settings.json`:
 
 | Command | Description |
 |---------|-------------|
-| `/claude-skills:gemini <prompt> [--model] [--file] [--diff] [--summary]` | Run a prompt through Google Gemini CLI. Supports code review (`--diff`), file summarization (`--summary`), and model selection. |
+| `/claude-skills:gemini <prompt> [--model] [--file] [--diff] [--summary]` | Run a prompt through Antigravity CLI (`agy`). Supports Gemini, Claude, and GPT models. Covers code review (`--diff`), file summarization (`--summary`), and model selection. |
 | `/claude-skills:image-gen <prompt> [--output] [--model]` | Generate images via Google Gemini API. Supports NanoBanana, NanoBanana 2 (default), NanoBanana Pro, Imagen 4, and Imagen 4 Fast models. |
 
 ### Productivity
@@ -382,13 +382,20 @@ Skills are context-loaded automatically by Claude Code based on triggers.
 
 **Trigger:** User mentions "ask Gemini", "use Gemini CLI", or invokes `/claude-skills:gemini`.
 
-A wrapper around the [Gemini CLI](https://github.com/google-gemini/gemini-cli) for non-interactive use inside Claude Code sessions. Covers single-shot Q&A, stdin piping, code review via `git diff`, and file summarization.
+A wrapper around [Antigravity CLI (`agy`)](https://github.com/nicholasgasior/antigravity-cli) for non-interactive use inside Claude Code sessions. `agy` is a multi-model AI assistant supporting Gemini, Claude, and GPT models via a unified interface. Covers single-shot Q&A, stdin piping, code review via `git diff`, file summarization, and multi-turn conversation continuation (`-c`).
 
-| Model alias | Model ID | Notes |
-|-------------|----------|-------|
-| (default) | `gemini-2.5-flash` | Fast, general purpose |
-| `gemini-2.5-pro` | `gemini-2.5-pro` | High quality, complex reasoning |
-| `gemini-2.0-flash` | `gemini-2.0-flash` | Lightweight |
+| Model Name | Notes |
+|-----------|-------|
+| `Gemini 3.5 Flash (Medium)` | Default — fast, balanced |
+| `Gemini 3.5 Flash (High)` | Higher quality Gemini Flash |
+| `Gemini 3.5 Flash (Low)` | Fastest Gemini Flash |
+| `Gemini 3.1 Pro (Low)` | Gemini Pro, lower quota |
+| `Gemini 3.1 Pro (High)` | Gemini Pro, higher quality |
+| `Claude Sonnet 4.6 (Thinking)` | Claude via agy |
+| `Claude Opus 4.6 (Thinking)` | Claude Opus via agy |
+| `GPT-OSS 120B (Medium)` | Open-source GPT via agy |
+
+Authentication is managed by `agy` itself — no API key configuration needed. Run `agy models` for the current model list.
 
 ### `invest`
 
@@ -616,7 +623,7 @@ Add to `~/.claude/settings.local.json` (never committed to git):
     "SCAN_OUTPUT_DIR":           "00_INBOX",
     "TARGET_FILENAME":           "index.md",
     "SCAN_EXCLUDE_PATTERNS":     "findjob/,reports/",
-    "GEMINI_API_KEY":            "your-gemini-api-key",
+    "GEMINI_API_KEY":            "your-gemini-api-key",    // required for /image-gen only
     "DATA_GO_KR_API_KEY":        "your-data-go-kr-api-key",
     "STORAGE_PROVIDER":          "r2",
     "R2_ACCOUNT_ID":             "your-cloudflare-account-id",
@@ -641,7 +648,8 @@ For AWS S3 instead of R2, replace the `R2_*` keys with `AWS_ACCESS_KEY_ID`, `AWS
 
 | Command(s) | Tool | Install |
 |------------|------|---------|
-| `/claude-skills:gemini`, `/claude-skills:image-gen` | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` |
+| `/claude-skills:gemini` | Antigravity CLI (`agy`) | Internal Google tool — authenticate via `agy` on first run |
+| `/claude-skills:image-gen` | [Gemini API](https://ai.google.dev/) | Requires `GEMINI_API_KEY` in `settings.local.json` |
 | `/claude-skills:ship`, `/claude-skills:github-urls`, `/claude-skills:grass-tracker` | [GitHub CLI](https://cli.github.com/) | `brew install gh` |
 | `/claude-skills:grass-tracker` | [grass-tracker](https://github.com/liks79/grass-tracker) | See repo for install |
 | `/claude-skills:cal`, `/claude-skills:email-summary`, `/claude-skills:email-archive`, `/claude-skills:newsletter`, `/claude-skills:invest` | [gws](https://github.com/nicholasgasior/gws) (Google Workspace CLI) | See gws repo; `gws auth login` must be authenticated |

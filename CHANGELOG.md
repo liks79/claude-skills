@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.5.9] — 2026-07-11
+
+### Changed
+- **`gemini` skill/command**: Migrated from the legacy `gemini` CLI to [Antigravity CLI (`agy`)](https://github.com/nicholasgasior/antigravity-cli), a multi-model assistant supporting Gemini, Claude, and GPT models via a unified interface. `-p`/`-m` flags replaced with `--print`/`--model`; model names are now quoted strings (e.g. `"Gemini 3.1 Pro (High)"`) instead of IDs. Authentication is handled by `agy` itself — no `GEMINI_API_KEY` needed for `/gemini` (still required for `/image-gen`). Synced from `staytuned-research-mono` commit `87130b7` (#192).
+- **`README.md`**: Updated the `gemini` skill section, command table, and required-tools table to reflect the `agy` migration; clarified that `GEMINI_API_KEY` is only needed for `/image-gen`.
+
 ## [1.5.8] — 2026-06-14
 
 ### Fixed
