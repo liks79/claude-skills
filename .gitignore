@@ -50,6 +50,10 @@ slide-*.pdf
 
 # scan — incremental metadata cache (generated at runtime)
 scripts/scan/.cache/
+.claude/scripts/scan/.cache/
+
+# add-tags — tag dictionary cache (generated at runtime)
+scripts/add-tags/.cache/
 
 # image-gen output
 *.png
